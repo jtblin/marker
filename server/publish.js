@@ -6,6 +6,10 @@
  * To change this template use File | Settings | File Templates.
  */
 
+Meteor.startup(function () {
+//	Documents.remove({});
+});
+
 Meteor.publish("documents", function () {
     return Documents.find(
         {$or: [{public: true}, {shared: this.userId}, {owner: this.userId}]});

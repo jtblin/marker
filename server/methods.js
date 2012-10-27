@@ -21,12 +21,14 @@ Meteor.methods({
 			throw new Meteor.Error(413, "Content too long");
 		if (! this.userId)
 			throw new Meteor.Error(403, "You must be logged in");
+		var uri = options.title.replace(/\s/g, '-');
 
 		return Documents.insert({
 			owner: this.userId,
 			title: options.title,
 			content: options.content,
 			public: !! options.public,
+			uri: uri,
 			shared: []
 		});
 	},

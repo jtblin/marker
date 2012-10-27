@@ -19,15 +19,16 @@
 
 <template name="header">
     <div id="header">
-        <span>Marker</span>
-        {{#if currentUser}}
-            <input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />
-            <img class="loading hidden" src="images/ajax-loader.gif" />
-            <input id="new-doc" type="button" value="New document" />
-        {{/if}}
+        <span id="home">Marker</span>
         <div id="login-buttons">
             {{loginButtons align="right"}}
         </div>
+        {{#if currentUser}}
+            <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
+            <!--<img class="loading hidden" src="images/ajax-loader.gif" />-->
+            <input id="new-doc" type="button" value="New" />
+            <input id="save-doc" type="button" value="Save" />
+        {{/if}}
     </div>
 </template>
 
