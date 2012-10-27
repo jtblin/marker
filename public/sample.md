@@ -17,7 +17,7 @@ Markdown is a lightweight markup language based on the formatting conventions th
 
 This document is written in Markdown; you can see the plain-text version on the left.  To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
-Showdown is a Javascript port of Markdown.  You can get the full [source code] by clicking on the version number at the bottom of the page.
+Showdown is a Javascript port of Markdown.  Get the full [source code].
 
   [john gruber]: http://daringfireball.net/
   [1]: http://daringfireball.net/projects/markdown/
