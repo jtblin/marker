@@ -1,0 +1,53 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Marker</title>
+</head>
+
+<body>
+{{> header}}
+<div id="content">
+    <div id="search" class="hide">
+        {{> search}}
+    </div>
+    <div id="canvas-wrapper">
+        <div id="canvas" class="fancy-scrollbar">
+            {{> doc}}
+        </div>
+    </div>
+</div>
+</body>
+
+<template name="header">
+    <div id="header">
+        <span>Marker</span>
+        {{#if currentUser}}
+            <input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />
+            <img class="loading hidden" src="images/ajax-loader.gif" />
+            <input id="new-doc" type="button" value="New document" />
+        {{/if}}
+        <div id="login-buttons">
+            {{loginButtons align="right"}}
+        </div>
+    </div>
+</template>
+
+<template name="search">
+    <ul>
+        {{#each results}}
+        <li doc-id="{{_id}}">
+            <div>title</div>
+            <div class="snippet-xs">content</div>
+        </li>
+        {{/each }}
+    </ul>
+</template>
+
+<template name="doc">
+    <div id="left-pane">
+        <textarea id="input-pane" cols="80" rows="20">{{{input}}}</textarea>
+    </div>
+    <div id="right-pane">
+        <div id="output-pane">{{{output}}}</div>
+    </div>
+    <!--<div class="drop">Drop a file...</div>-->
+</template>
