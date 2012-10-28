@@ -25,13 +25,12 @@ window.onclick = function (e) {
 
 Template.header.events({
 	'click #home': function () {
-		Router.navigate('', true);
+		Router.to('', true);
 	},
 	'click #new-doc': function () {
-		Router.navigate('new', true);
+		Router.to('new', true);
 	},
 	'click #save-doc': function () {
-		l('Template.header.events click #save-doc');
 		if (!Session.get('docId')) {
 			var doc = {
 				title: Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', ''),
@@ -133,7 +132,7 @@ var mkRouter = Backbone.Router.extend({
 			l('TODO: error messaging');
 			Session.set("docId", null);
 			Session.set("content", '');
-			this.navigate('', true);
+			this.to('', true);
 		}
 	},
 	home: function () {
@@ -146,9 +145,13 @@ var mkRouter = Backbone.Router.extend({
 		l(Meteor.status());
 		var doc = Documents.findOne({_id: docId});
 		if (doc)
-			this.navigate(doc.uri, true);
+			this.to(doc.uri, true);
 		else
 			l('TODO: error messaging');
+	},
+	to: function(uri, options) {
+		this.navigate(uri, options);
+		_gaq.push(['_trackPageview']);
 	}
 });
 
