@@ -65,3 +65,13 @@
     </div>
     <!--<div class="drop">Drop a file...</div>-->
 </template>
+
+
+<template name="email">
+    <html>
+        <body>
+        Your document has been created and you can access it at any time at this url:
+        <a href="{{{url}}}">{{{url}}}</a>
+        </body>
+    </html>
+</template>

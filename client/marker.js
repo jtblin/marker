@@ -109,6 +109,12 @@ Template.doc.rendered = function () {
 	$('#output-pane').scrollTop($('#input-pane').scrollTop());
 };
 
+// Email
+
+//Template.email.url = function () {
+//	return Meteor.absoluteUrl(Documents.findOne({_id: Session.get("docId")}).uri);
+//}
+
 // Subscriptions
 
 Meteor.subscribe('documents', function () {

@@ -23,7 +23,7 @@ Meteor.methods({
 			throw new Meteor.Error(403, "You must be logged in");
 		var uri = options.title.replace(/\s/g, '-');
 
-		return Documents.insert({
+		var docId = Documents.insert({
 			owner: this.userId,
 			title: options.title,
 			content: options.content,
@@ -31,6 +31,22 @@ Meteor.methods({
 			uri: uri,
 			shared: []
 		});
+
+		try {
+			// TODO: find a way to render templates on server side
+			Email.send({
+				from: "noreply@marker.meteor.com",
+				to: contactEmail(Meteor.users.findOne(this.userId)),
+				subject: "Congratulations - Your document is created at " + Meteor.absoluteUrl(uri),
+				html: "<html><body>Your document has been created and you can access it at any time at this url: <a href='" +
+						Meteor.absoluteUrl(uri) + "'>" + Meteor.absoluteUrl(uri) + "</a></body></html>"
+			});
+		}
+		catch (e) {
+			l('====== Cannot send email for document ' + docId + '======')
+		}
+
+		return docId;
 	},
 	updateDocument: function (docId, content) {
 		if (content.length > 10000)
@@ -43,3 +59,12 @@ Meteor.methods({
 		return Documents.update({_id : docId}, {$set : {content: content} });
 	}
 });
+
+// TODO: structure
+var contactEmail = function (user) {
+	if (user.emails && user.emails.length)
+		return user.emails[0].address;
+	if (user.services && user.services.facebook && user.services.facebook.email)
+		return user.services.facebook.email;
+	return null;
+};
