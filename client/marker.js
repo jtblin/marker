@@ -30,6 +30,16 @@ Template.header.events({
 	'click #new-doc': function () {
 		Router.to('new', true);
 	},
+	'click #edit-doc': function () {
+		var doc = Documents.findOne({_id: Session.get('docId')});
+		if (doc)
+			Router.to(doc.uri + '/edit', true);
+	},
+	'click #cancel-edit': function () {
+		var doc = Documents.findOne({_id: Session.get('docId')});
+		if (doc)
+			Router.to(doc.uri, true);
+	},
 	'click #save-doc': function () {
 		if (!Session.get('docId')) {
 			var doc = {
@@ -89,31 +99,30 @@ Template.search.events({
 
 // Document
 
-Template.doc.events({
+Template.editor.events({
 	'keyup #input-pane': function (e) {
 		Session.set('content', e.target.value || "");
 	}
 });
 
-Template.doc.input = function () {
+Template.editor.input = function () {
 	return Session.get('content');
 };
 
-Template.doc.output = function () {
+Template.preview.output = function () {
 	var converter = new Showdown.converter();
 	return converter.makeHtml(Session.get('content') || "");
 };
 
-Template.doc.rendered = function () {
+Template.editor.rendered = function () {
 	MK.events.resizeCanvas();
 	$('#output-pane').scrollTop($('#input-pane').scrollTop());
 };
 
-// Email
-
-//Template.email.url = function () {
-//	return Meteor.absoluteUrl(Documents.findOne({_id: Session.get("docId")}).uri);
-//}
+Template.preview.rendered = function () {
+	MK.events.resizeCanvas();
+	$('#output-pane').scrollTop($('#input-pane').scrollTop());
+};
 
 // Subscriptions
 
@@ -123,17 +132,27 @@ Meteor.subscribe('documents', function () {
 
 // Router
 
-var mkRouter = Backbone.Router.extend({
+var mkRouter = ReactiveRouter.extend({
 	routes: {
-		"new": "newDoc",
-		":docUri": "getDoc",
-		"": 'home'
+		'new': 'newDoc',
+		':docUri': 'getDoc',
+		':docUri/edit': 'editDoc',
+		'': 'home'
+	},
+	home: function() {
+		MK.app.clearSession();
+		this.goto('home');
+	},
+	newDoc: function () {
+		MK.app.clearSession();
+		this.goto('new');
 	},
 	getDoc: function (docUri) {
 		var doc = Documents.findOne({uri : docUri});
 		if (doc) {
 			Session.set("docId", doc._id);
 			Session.set("content", doc.content);
+			this.goto("doc");
 		} else {
 			l('TODO: error messaging');
 			Session.set("docId", null);
@@ -141,11 +160,18 @@ var mkRouter = Backbone.Router.extend({
 			this.to('', true);
 		}
 	},
-	home: function () {
-		MK.app.clearSession();
-	},
-	newDoc: function () {
-		MK.app.clearSession();
+	editDoc: function (docUri) {
+		var doc = Documents.findOne({uri : docUri});
+		if (doc) {
+			Session.set("docId", doc._id);
+			Session.set("content", doc.content);
+			this.goto("edit");
+		} else {
+			l('TODO: error messaging');
+			Session.set("docId", null);
+			Session.set("content", '');
+			this.to('', true);
+		}
 	},
 	goToDoc: function (docId) {
 		l(Meteor.status());
@@ -153,11 +179,12 @@ var mkRouter = Backbone.Router.extend({
 		if (doc)
 			this.to(doc.uri, true);
 		else
-			l('TODO: error messaging');
+			l('TODO: error handling and messaging');
 	},
 	to: function(uri, options) {
 		this.navigate(uri, options);
 		_gaq.push(['_trackPageview']);
+		Session.set("currentPage", uri);
 	}
 });
 

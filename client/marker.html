@@ -19,12 +19,9 @@
 <body>
 {{> header}}
 <div id="content">
-    <div id="search" class="hide">
-        {{> search}}
-    </div>
     <div id="canvas-wrapper">
         <div id="canvas" class="fancy-scrollbar">
-            {{> doc}}
+            {{{render currentPage}}}
         </div>
     </div>
 </div>
@@ -36,11 +33,17 @@
         <div id="login-buttons">
             {{loginButtons align="right"}}
         </div>
+        <input id="new-doc" type="button" value="New" />
         {{#if currentUser}}
             <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
             <!--<img class="loading hidden" src="images/ajax-loader.gif" />-->
-            <input id="new-doc" type="button" value="New" />
             <input id="save-doc" type="button" value="Save" />
+            {{#if isCurrentPage "doc"}}
+                <input id="edit-doc" type="button" value="Edit" />
+            {{/if}}
+            {{#if isCurrentPage "edit"}}
+                <input id="cancel-edit" type="button" value="Cancel" />
+            {{/if}}
         {{/if}}
     </div>
 </template>
@@ -56,16 +59,37 @@
     </ul>
 </template>
 
+<template name="home">
+
+</template>
+
+<template name="new">
+    {{> editor}}
+    {{> preview}}
+</template>
+
+<template name="edit">
+    {{> editor}}
+    {{> preview}}
+</template>
+
 <template name="doc">
+    {{> preview}}
+</template>
+
+<template name="editor">
     <div id="left-pane">
         <textarea id="input-pane" cols="80" rows="20">{{{input}}}</textarea>
     </div>
+</template>
+
+<template name="preview">
     <div id="right-pane">
         <div id="output-pane">{{{output}}}</div>
     </div>
-    <!--<div class="drop">Drop a file...</div>-->
 </template>
 
+<!--Unused-->
 
 <template name="email">
     <html>
