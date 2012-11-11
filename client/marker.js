@@ -8,7 +8,8 @@ MK.app = {
 	clearSession: function () {
 		Session.set("docId", null);
 		Session.set("content", '');
-	}
+	},
+	converter: new Showdown.converter()
 };
 
 // Window
@@ -109,9 +110,12 @@ Template.editor.input = function () {
 	return Session.get('content');
 };
 
+Template.doc.content = function () {
+	return MK.app.converter.makeHtml(Session.get('content') || "");
+};
+
 Template.preview.output = function () {
-	var converter = new Showdown.converter();
-	return converter.makeHtml(Session.get('content') || "");
+	return MK.app.converter.makeHtml(Session.get('content') || "");
 };
 
 Template.editor.rendered = function () {
