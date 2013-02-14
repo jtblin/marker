@@ -22,6 +22,8 @@ Setting up a wiki **should be as easy as typing an email** is Marker's fundament
 ## Disclaimer
 Marker was created to play with [meteorjs](https://github.com/meteor/meteor). It uses [Shwodown](https://github.com/coreyti/showdown) for the markdown conversion, and [Backbone](https://github.com/documentcloud/backbone) for the Router.
 
+The app is deployed on [marker.meteor.com](http://marker.meteor.com/).
+
 ## Author
 
 Jerome Touffe-Blin, [@jtblin](https://twitter.com/jtlbin), [http://www.linkedin.com/in/jtblin](http://www.linkedin.com/in/jtblin)
