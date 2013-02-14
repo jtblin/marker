@@ -8,8 +8,23 @@ MK.app = {
 	clearSession: function () {
 		Session.set("docId", null);
 		Session.set("content", '');
+		Session.set("docPage", 1);
+		Session.set("docQuery", {});
 	},
-	converter: new Showdown.converter()
+	converter: new Showdown.converter(),
+	setDoc: function () {
+		var doc = Documents.findOne({});
+		if (doc) {
+			l(doc.uri);
+			Session.set("docId", doc._id);
+			Session.set("content", doc.content);
+		} else {
+			l('TODO: error messaging');
+			Session.set("docId", null);
+			Session.set("content", '');
+			Router.to('', true);
+		}
+	}
 };
 
 // Window
@@ -43,18 +58,15 @@ Template.header.events({
 	},
 	'click #save-doc': function () {
 		if (!Session.get('docId')) {
+			var title = Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', '');
 			var doc = {
-				title: Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', ''),
+				title: title,
 				content: Session.get('content'),
-				public: true
+				public: true,
+				uri: title.replace(/\s/g, '-')
 			};
 			Meteor.call("createDocument", doc, function (error, docId) {
-				if (! error) {
-					// HACK: find a better way as this is not reliable,
-					// what happen is that the client hasn't finished
-					// refreshed the data when the router queries for the doc
-					Meteor.setTimeout(function () { Router.goToDoc(docId) }, 1000);
-				}
+				if (! error) Router.navigate(doc.uri + '/edit');
 			});
 		} else {
 			Meteor.call("updateDocument", Session.get('docId'), Session.get('content'));
@@ -78,6 +90,12 @@ Template.header.events({
 	}
 });
 
+// Home
+
+Template.home.docs = function () {
+	return Documents.find();
+};
+
 // Search
 
 Template.search.results = function () {
@@ -100,6 +118,10 @@ Template.search.events({
 
 // Document
 
+Template.edit.created = function () {
+	MK.app.setDoc();
+};
+
 Template.editor.events({
 	'keyup #input-pane': function (e) {
 		Session.set('content', e.target.value || "");
@@ -111,6 +133,7 @@ Template.editor.input = function () {
 };
 
 Template.doc.content = function () {
+	MK.app.setDoc();
 	return MK.app.converter.makeHtml(Session.get('content') || "");
 };
 
@@ -130,8 +153,19 @@ Template.preview.rendered = function () {
 
 // Subscriptions
 
-Meteor.subscribe('documents', function () {
-	Backbone.history.start({pushState: true});
+Session.set("docPage", 1);
+Session.set("docQuery", {});
+Session.set("page", "home");
+
+var historyStarted = false;
+
+Meteor.autosubscribe(function () {
+	Meteor.subscribe('documents', Session.get("docQuery"), Session.get("docPage"), function () {
+		if (!historyStarted) {
+			Backbone.history.start({pushState: true});
+			historyStarted = true;
+		}
+	});
 });
 
 // Router
@@ -152,38 +186,14 @@ var mkRouter = ReactiveRouter.extend({
 		this.goto('new');
 	},
 	getDoc: function (docUri) {
-		var doc = Documents.findOne({uri : docUri});
-		if (doc) {
-			Session.set("docId", doc._id);
-			Session.set("content", doc.content);
-			this.goto("doc");
-		} else {
-			l('TODO: error messaging');
-			Session.set("docId", null);
-			Session.set("content", '');
-			this.to('', true);
-		}
+		Session.set("docQuery", {uri : docUri});
+		Session.set("docPage", 1);
+		this.goto("doc");
 	},
 	editDoc: function (docUri) {
-		var doc = Documents.findOne({uri : docUri});
-		if (doc) {
-			Session.set("docId", doc._id);
-			Session.set("content", doc.content);
-			this.goto("edit");
-		} else {
-			l('TODO: error messaging');
-			Session.set("docId", null);
-			Session.set("content", '');
-			this.to('', true);
-		}
-	},
-	goToDoc: function (docId) {
-		l(Meteor.status());
-		var doc = Documents.findOne({_id: docId});
-		if (doc)
-			this.to(doc.uri, true);
-		else
-			l('TODO: error handling and messaging');
+		Session.set("docQuery", {uri : docUri});
+		Session.set("docPage", 1);
+		this.goto('edit');
 	},
 	to: function(uri, options) {
 		this.navigate(uri, options);

@@ -63,7 +63,11 @@
 </template>
 
 <template name="home">
-
+    {{#each docs}}
+    <div>
+        <a href="{{uri}}">{{title}}</a>
+    </div>
+    {{/each }}
 </template>
 
 <template name="new">
