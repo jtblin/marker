@@ -17,19 +17,23 @@
 </head>
 
 <body>
-{{> header}}
-<div id="content">
-    <div id="canvas-wrapper">
-        <div id="canvas" class="fancy-scrollbar">
-            {{{render currentPage}}}
+
+</body>
+
+<template name="layout">
+    {{> header}}
+    <div id="content">
+        <div id="canvas-wrapper">
+            <div id="canvas" class="fancy-scrollbar">
+                {{{yield}}}
+            </div>
         </div>
     </div>
-</div>
-</body>
+</template>
 
 <template name="header">
     <div id="header">
-        <span id="home">Marker</span>
+        <span id="home"><a class="logo" href="{{rootPath}}">Marker</a></span>
         <div id="login-buttons">
             {{loginButtons align="right"}}
         </div>
@@ -37,13 +41,13 @@
         {{#if currentUser}}
             <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
             <!--<img class="loading hidden" src="images/ajax-loader.gif" />-->
-            {{#if isCurrentPage "doc"}}
+            {{#if pageTemplateEquals "doc"}}
                 <input id="edit-doc" type="button" value="Edit" />
             {{/if}}
-            {{#if isCurrentPage "new"}}
+            {{#if pageTemplateEquals "new"}}
                 <input id="save-doc" type="button" value="Save" />
             {{/if}}
-            {{#if isCurrentPage "edit"}}
+            {{#if pageTemplateEquals "edit"}}
                 <input id="save-doc" type="button" value="Save" />
                 <input id="cancel-edit" type="button" value="Cancel" />
             {{/if}}
@@ -81,7 +85,7 @@
 </template>
 
 <template name="doc">
-    <div id="content">
+    <div id="">
         {{{content}}}
     </div>
 </template>

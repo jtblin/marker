@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-var pageSize = 20;
+var pageSize = 50;
 
 Meteor.startup(function () {
 //	Documents.remove({});

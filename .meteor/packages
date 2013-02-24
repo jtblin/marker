@@ -5,11 +5,10 @@
 
 preserve-inputs
 less
-backbone
 showdown
 accounts-password
 accounts-ui
 jquery
 accounts-facebook
 email
-router
+mini-pages
