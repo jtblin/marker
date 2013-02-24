@@ -8,14 +8,11 @@ MK.app = {
 	clearSession: function () {
 		Session.set("docId", null);
 		Session.set("content", '');
-		Session.set("docPage", 1);
-		Session.set("docQuery", {});
+		Session.set("currentPage", 1);
 	},
 	converter: new Showdown.converter(),
-	setDoc: function () {
-		if (jQuery.isEmptyObject(Session.get("docQuery")))
-			return false;
-		var doc = Documents.findOne({});
+	setDoc: function (context) {
+		var doc = Documents.findOne({uri : context.params.docUri});
 		if (doc) {
 			if (Session.get("docId") !== doc._id) {
 				Session.set("docId", doc._id);
@@ -23,13 +20,10 @@ MK.app = {
 			}
 		}
 	},
-	getDoc: function (context) {
-		Session.set("docQuery", {uri : context.params.docUri});
-		Session.set("docPage", 1);
-	},
 	setAnalytics: function () {
 		_gaq.push(['_trackPageview']);
-	}
+	},
+	pageSize: 50
 };
 
 // Window
@@ -95,7 +89,8 @@ Template.header.events({
 // Home
 
 Template.home.docs = function () {
-	return Documents.find();
+	var pageIndex = Session.get("currentPage");
+	return Documents.find({}, {skip: (pageIndex-1)*MK.app.pageSize, limit: pageIndex*MK.app.pageSize});
 };
 
 // Search
@@ -150,23 +145,19 @@ Template.preview.rendered = function () {
 
 // Subscriptions
 
-Session.set("docPage", 1);
-Session.set("docQuery", {});
+Session.set("currentPage", 1);
 Session.set("page", "home");
 
 Meteor.autorun(function () {
-	Meteor.subscribe('documents', Session.get("docQuery"), Session.get("docPage"), function () {
-		// HACK: onReady callback triggered before subscription update has been completed.
-		Meteor.setTimeout(MK.app.setDoc, 1000);
-	});
+	Meteor.subscribe('documents');
 });
 
 // Router
 
 Meteor.pages({
 	'/new': {to: 'new', before: [MK.app.setAnalytics, MK.app.clearSession] },
-	'/:docUri': {to: 'doc', before: [MK.app.setAnalytics, MK.app.getDoc]},
-	'/:docUri/edit': {to: 'edit', before: [MK.app.setAnalytics, MK.app.getDoc]},
+	'/:docUri': {to: 'doc', before: [MK.app.setAnalytics, MK.app.setDoc]},
+	'/:docUri/edit': {to: 'edit', before: [MK.app.setAnalytics, MK.app.setDoc]},
 	'/': { to: 'home', as: 'root', before: [MK.app.setAnalytics, MK.app.clearSession] }
 });
 
