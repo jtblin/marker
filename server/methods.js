@@ -37,9 +37,9 @@ Meteor.methods({
 			Email.send({
 				from: "noreply@marker.meteor.com",
 				to: contactEmail(Meteor.users.findOne(this.userId)),
-				subject: "Congratulations - Your document is created at " + Meteor.absoluteUrl(uri),
+				subject: "Congratulations - Your document is created at " + Meteor.absoluteUrl(options.uri),
 				html: "<html><body>Your document has been created and you can access it at any time at this url: <a href='" +
-						Meteor.absoluteUrl(uri) + "'>" + Meteor.absoluteUrl(uri) + "</a></body></html>"
+						Meteor.absoluteUrl(options.uri) + "'>" + Meteor.absoluteUrl(options.uri) + "</a></body></html>"
 			});
 		}
 		catch (e) {
