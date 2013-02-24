@@ -1,14 +1,18 @@
 #A brave new era of wiki
 
-Setting up a wiki **should be as easy as typing an email** is Marker's fundamental principle.
+Setting up a wiki **should be as easy as typing an email** is Marker's fundamental principle. 
+
+## Source
+
+Feel free to browse the source code on github: [https://github.com/jtblin/marker](https://github.com/jtblin/marker).
 
 ## Roadmap
 
 1. Single user markdown wiki - done
 2. Email confirmation - done
 2. Homepage wiki links - done
+3. use mini-page package - done
 3. Styling
-3. use mini-page package
 3. Projects namespaces
 3. Wikis search
 3. Reading mode
@@ -20,9 +24,7 @@ Setting up a wiki **should be as easy as typing an email** is Marker's fundament
 6. Premium wikis
 
 ## Disclaimer
-Marker was created to play with [meteorjs](https://github.com/meteor/meteor). It uses [Shwodown](https://github.com/coreyti/showdown) for the markdown conversion, and [Backbone](https://github.com/documentcloud/backbone) for the Router.
-
-The app is deployed on [marker.meteor.com](http://marker.meteor.com/).
+Marker was created to play with [meteorjs](https://github.com/meteor/meteor). It uses [Showdown](https://github.com/coreyti/showdown) for the markdown conversion, and [mini-pages](https://github.com/cmather/meteor-mini-pages) for the Router.
 
 ## Author
 

@@ -156,7 +156,8 @@ Session.set("page", "home");
 
 Meteor.autorun(function () {
 	Meteor.subscribe('documents', Session.get("docQuery"), Session.get("docPage"), function () {
-		Meteor.setTimeout(MK.app.setDoc, 100);
+		// HACK: onReady callback triggered before subscription update has been completed.
+		Meteor.setTimeout(MK.app.setDoc, 1000);
 	});
 });
 
