@@ -13,6 +13,8 @@ Feel free to browse the source code on github: [https://github.com/jtblin/marker
 2. Homepage wiki links - done
 3. use mini-pages package - done
 3. Home page list styling - done
+3. Basic Responsive Web Design (mobile) - done
+3. Optimisation for tablet
 3. Allow entering title
 3. Infinite scroll
 3. Delete wiki
