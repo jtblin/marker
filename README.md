@@ -6,6 +6,10 @@ Setting up a wiki **should be as easy as typing an email** is Marker's fundament
 
 Feel free to browse the source code on github: [https://github.com/jtblin/marker](https://github.com/jtblin/marker).
 
+## Demo
+
+You can access the demo and create wikis on [http://marker.meteor.com/](http://marker.meteor.com/).
+
 ## Roadmap
 
 1. Single user markdown wiki - done
