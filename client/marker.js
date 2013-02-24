@@ -24,7 +24,13 @@ MK.app = {
 	setAnalytics: function () {
 		_gaq.push(['_trackPageview']);
 	},
-	pageSize: 12
+	pageSize: 12,
+	hideLoader: function () {
+		$('#header .loading').addClass('hidden');
+	},
+	showLoader: function () {
+		$('#header .loading').removeClass('hidden');
+	}
 };
 
 // Window
@@ -119,7 +125,7 @@ Handlebars.registerHelper('activeBox', function(id){
 	return (id === Session.get('docId')) ? 'active' : 'inactive';
 });
 
-// Search
+// Search (not implemented)
 
 Template.search.results = function () {
 	l('Template.search.results not implemented');
@@ -127,7 +133,7 @@ Template.search.results = function () {
 };
 
 Template.search.rendered = function () {
-	$('#header .loading').addClass('hidden');
+	MK.app.hideLoader();
 };
 
 Template.search.events({
@@ -175,7 +181,7 @@ Session.set("currentPage", 1);
 Session.set("page", "home");
 
 Meteor.autorun(function () {
-	Meteor.subscribe('documents');
+	Meteor.subscribe('documents', MK.app.hideLoader);
 });
 
 // Router

@@ -38,9 +38,8 @@
             {{loginButtons align="right"}}
         </div>
         <input id="new-doc" type="button" value="New" />
+        <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
         {{#if currentUser}}
-            <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
-            <!--<img class="loading hidden" src="images/ajax-loader.gif" />-->
             {{#if pageTemplateEquals "doc"}}
                 <input id="edit-doc" type="button" value="Edit" />
             {{/if}}
@@ -52,6 +51,7 @@
                 <input id="cancel-edit" type="button" value="Cancel" />
             {{/if}}
         {{/if}}
+        {{#constant}}<img class="loading" src="/images/ajax-loader.gif" />{{/constant}}
     </div>
 </template>
 
