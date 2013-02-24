@@ -67,21 +67,43 @@
 </template>
 
 <template name="home">
+    <div id="left-pane">
+        {{> list}}
+    </div>
+    <div id="right-pane" style="margin-top: 10px; right: auto">
+        <div class="right-wrap">
+            <div id="sticky">
+                {{> preview}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="list">
     {{#each docs}}
-    <div>
-        <a href="{{uri}}">{{title}}</a>
+    <div class="box {{activeBox _id}}" id="{{_id}}">
+        <a href="{{uri}}/edit">{{title}}</a>
+        <div class="sm-preview">{{{convert content}}}</div>
     </div>
     {{/each }}
 </template>
 
 <template name="new">
-    {{> editor}}
-    {{> preview}}
+    <div id="left-pane">
+        {{> editor}}
+    </div>
+    <div id="right-pane">
+        {{> preview}}
+    </div>
 </template>
 
 <template name="edit">
-    {{> editor}}
-    {{> preview}}
+    <div id="left-pane">
+        {{> editor}}
+    </div>
+    <div id="right-pane">
+        {{> preview}}
+    </div>
 </template>
 
 <template name="doc">
@@ -91,15 +113,11 @@
 </template>
 
 <template name="editor">
-    <div id="left-pane">
-        <textarea id="input-pane" cols="80" rows="20">{{{input}}}</textarea>
-    </div>
+    <textarea id="input-pane" cols="80" rows="20">{{{input}}}</textarea>
 </template>
 
 <template name="preview">
-    <div id="right-pane">
-        <div id="output-pane">{{{output}}}</div>
-    </div>
+    <div id="output-pane">{{{output}}}</div>
 </template>
 
 <!--Unused-->

@@ -4,6 +4,7 @@ var MK = MK || {};
 MK.app = {
 	init: function () {
 		l('MK.app.init()');
+		MK.events.stickyPane();
 	},
 	clearSession: function () {
 		Session.set("docId", null);
@@ -23,7 +24,7 @@ MK.app = {
 	setAnalytics: function () {
 		_gaq.push(['_trackPageview']);
 	},
-	pageSize: 50
+	pageSize: 12
 };
 
 // Window
@@ -53,7 +54,7 @@ Template.header.events({
 			Meteor.go(Meteor.docPath({docUri: doc.uri}));
 	},
 	'click #save-doc': function () {
-		if (!Session.get('docId')) {
+		if (! Session.get('docId')) {
 			var title = Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', '');
 			var doc = {
 				title: title,
@@ -88,10 +89,35 @@ Template.header.events({
 
 // Home
 
-Template.home.docs = function () {
-	var pageIndex = Session.get("currentPage");
+Template.list.docs = function () {
+	var pageIndex = Session.get("currentPage"),
+			doc = Documents.findOne({});
+	if (doc) {
+		Session.set('content', doc.content);
+		Session.set('docId', doc._id);
+	}
 	return Documents.find({}, {skip: (pageIndex-1)*MK.app.pageSize, limit: pageIndex*MK.app.pageSize});
 };
+
+Template.list.events({
+	'click .box': function (e) {
+		var doc = Documents.findOne({_id: this._id});
+		if (doc) {
+			Session.set('content', doc.content);
+			Session.set('docId', doc._id);
+		}
+		$('.active').removeClass('active').addClass('inactive');
+		$('#' + this._id).removeClass('inactive').addClass('active');
+	}
+});
+
+Handlebars.registerHelper('convert', function(input){
+	return MK.app.converter.makeHtml(input).substr(0, 1000);
+});
+
+Handlebars.registerHelper('activeBox', function(id){
+	return (id === Session.get('docId')) ? 'active' : 'inactive';
+});
 
 // Search
 

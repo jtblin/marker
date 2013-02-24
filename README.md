@@ -11,8 +11,13 @@ Feel free to browse the source code on github: [https://github.com/jtblin/marker
 1. Single user markdown wiki - done
 2. Email confirmation - done
 2. Homepage wiki links - done
-3. use mini-page package - done
-3. Styling
+3. use mini-pages package - done
+3. Home page list styling - done
+3. Allow entering title
+3. Infinite scroll
+3. Delete wiki
+3. Feedback on save
+3. mark as private/public
 3. Projects namespaces
 3. Wikis search
 3. Reading mode
@@ -28,7 +33,7 @@ Marker was created to play with [meteorjs](https://github.com/meteor/meteor). It
 
 ## Author
 
-Jerome Touffe-Blin, [@jtblin](https://twitter.com/jtlbin), [http://www.linkedin.com/in/jtblin](http://www.linkedin.com/in/jtblin)
+Jerome Touffe-Blin, [@jtblin](https://twitter.com/jtblin), [http://www.linkedin.com/in/jtblin](http://www.linkedin.com/in/jtblin)
 
 ## License
 
