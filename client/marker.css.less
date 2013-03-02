@@ -1,5 +1,5 @@
 html, body, input, select, textarea {
-    font: 14px/18px "Helvetica Neue",Arial,Helvetica,sans-serif;
+    font: 14px/18px "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #3E3E3E;
 }
 
@@ -15,11 +15,75 @@ body {
   padding: 0;
   margin: 0;
   position: relative;
-  background: url("/images/light-grey-bg.png")
+  font-size: 14px;
+  line-height: 22px;
+  background: #f4f4f4 url(/images/background.png);
+  color: #000;
+}
+a, a:visited {
+  color: #444;
+}
+a:active, a:hover {
+  color: #000;
+}
+a:hover {
+  text-decoration: underline;
+}
+h1, h2, h3, h4, h5, h6 {
+  padding-top: 0.4em;
+}
+ul {
+  list-style-type: circle;
+  padding: 0 0 0 1.5em;
+}
+li {
+  width: 80%;
+  margin-bottom: 10px;
+}
+blockquote {
+  border-left:.5em solid #bbb;
+  padding: 0 2em;
+  margin-left:0;
+  max-width: 30em;
+}
+blockquote  cite {
+  font-size:14px;
+  line-height:20px;
+  color:#bfbfbf;
+}
+blockquote cite:before {
+  content: '\2014 \00A0';
+}
+
+blockquote p {
+  color: #666;
+  max-width: 30em;
+}
+hr {
+  text-align: left;
+  margin: 0 auto 0 0;
+  color: #999;
+}
+code, pre, tt {
+  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-size: 12px;
+  line-height: 18px;
+  font-style: normal;
+}
+code {
+  margin-left: 0.2em;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+pre {
+  font-size: .9em;
+  padding: 2px 0 2px 15px;
+  border-left: .5em solid #bbb;
+  margin: 0px 0 30px;
 }
 
 #header {
-  padding: 5px 8px;
+  padding: .3em .6em;
   margin: 0;
   position: relative;
   height: 30px;
@@ -34,7 +98,7 @@ body {
   }
 
   #new-doc {
-    margin-left: 30px;
+    margin-left: 2em;
   }
 
   .logo {
@@ -76,13 +140,13 @@ body {
 }
 
 #output-pane {
-  background: url("/images/dark-grey-bg.png");
+  background: url("/images/light-grey-bg.png");
   overflow-y: scroll;
 }
 
 #input-pane, #output-pane {
   margin: 0;
-  padding: 0px 4px;
+  padding: 0px 10px;
   width: 100%;
   display: block;
   border: 1px solid black;
@@ -104,8 +168,11 @@ body {
   }
 }
 
-@media only screen and (min-width: 481px), only screen and (min-device-width: 481px) {
-
+@media only screen and (min-width: 960px), only screen and (min-device-width: 960px) {
+  div.container {
+    width: 550px;
+    margin: 40px 0 50px 260px;
+  }
   .active {
     border: solid 7px rgba(17, 114, 238, 0.73);
   }
@@ -131,10 +198,53 @@ body {
   }
 }
 
-@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
-  #output-pane, #cancel-edit {
+@media only screen and (max-width: 1024px) {
+  .box {
+    width: 200px;
+  }
+  .inactive {
+    width: 208px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  #left-pane {
+    left: 0;
+    width: 100%;
+    margin: 0px 0px;
+  }
+
+  .box {
+    margin: 10px 10px;
+    padding: 10px 10px;
+    width: 320px;
+    height: 240px;
+    border: groove 1px #3E3E3E;
+  }
+
+  #output-pane {
     display: none;
   }
+}
+
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 12px;
+  }
+
+  #output-pane, .hidden {
+    display: none;
+  }
+  #header {
+    #new-doc {
+      margin-left: 5px;
+    }
+  }
+
   #left-pane {
     left: 0;
     width: 91%;
@@ -156,5 +266,8 @@ body {
   .edit {
     width: 97% !important;
   }
+  div.container {
+    width: 91%;
+    margin: 4px 0 5px 20px;
+  }
 }
-
