@@ -117,14 +117,6 @@ Template.list.events({
 	}
 });
 
-Handlebars.registerHelper('convert', function(input){
-	return MK.app.converter.makeHtml(input).substr(0, 1000);
-});
-
-Handlebars.registerHelper('activeBox', function(id){
-	return (id === Session.get('docId')) ? 'active' : 'inactive';
-});
-
 // Search (not implemented)
 
 Template.search.results = function () {
@@ -178,7 +170,6 @@ Template.preview.rendered = function () {
 // Subscriptions
 
 Session.set("currentPage", 1);
-Session.set("page", "home");
 
 Meteor.autorun(function () {
 	Meteor.subscribe('documents', MK.app.hideLoader);
