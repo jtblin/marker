@@ -18,10 +18,10 @@ You can access the demo and create wikis on [http://marker.meteor.com/](http://m
 3. use mini-pages package - done
 3. Home page list styling - done
 3. Basic Responsive Web Design (mobile) - done
-3. Optimisation for tablet
+3. Delete wiki -done 
+3. Optimisation for tablets - done
 3. Allow entering title
 3. Infinite scroll
-3. Delete wiki
 3. Feedback on save
 3. mark as private/public
 3. Projects namespaces
