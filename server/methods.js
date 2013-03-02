@@ -53,10 +53,15 @@ Meteor.methods({
 			throw new Meteor.Error(413, "Content too long");
 		if (! this.userId)
 			throw new Meteor.Error(403, "You must be logged in");
-		if (! Documents.find({$and : [{_id : docId}, {$or : [{public: true}, {shared: this.userId}, {owner: this.userId}]}] }))
+		if (! Documents.findOne({$and : [{_id : docId}, {$or : [{public: true}, {shared: this.userId}, {owner: this.userId}]}] }))
 			throw new Meteor.Error(403, "You don't have the rights to modify this document");
 
 		return Documents.update({_id : docId}, {$set : {content: content} });
+	},
+	deleteDocument: function (docId) {
+		if (! Documents.findOne({_id : docId, owner: this.userId }))
+			throw new Meteor.Error(403, "You don't have the rights to modify this document");
+		Documents.remove({_id : docId});
 	}
 });
 

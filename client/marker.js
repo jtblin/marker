@@ -45,6 +45,11 @@ window.onclick = function (e) {
 
 // Header
 
+Template.header.canDelete = function () {
+	var doc = Documents.findOne({_id: Session.get('docId')});
+	return (doc && doc.owner === Meteor.userId()) ? "" : "hide";
+};
+
 Template.header.events({
 	'click #new-doc': function () {
 		Meteor.go(Meteor.newPath());
@@ -59,6 +64,14 @@ Template.header.events({
 		if (doc)
 			Meteor.go(Meteor.docPath({docUri: doc.uri}));
 	},
+	'click #delete-doc': function () {
+		Meteor.call("deleteDocument", Session.get('docId'), function (error) {
+			if (! error)
+				Meteor.go(Meteor.rootPath());
+			else
+				alert(error.reason);
+		});
+	},
 	'click #save-doc': function () {
 		if (! Session.get('docId')) {
 			var title = Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', '');
@@ -69,10 +82,15 @@ Template.header.events({
 				uri: title.replace(/\s/g, '-')
 			};
 			Meteor.call("createDocument", doc, function (error, docId) {
-				if (! error) Meteor.go(Meteor.editPath({docUri: doc.uri}));
+				if (! error)
+					Meteor.go(Meteor.editPath({docUri: doc.uri}));
+				else
+					alert(error.reason);
 			});
 		} else {
-			Meteor.call("updateDocument", Session.get('docId'), Session.get('content'));
+			Meteor.call("updateDocument", Session.get('docId'), Session.get('content'), function (error) {
+				if (error) alert(error.reason);
+			});
 		}
 	},
 	'keyup #search-text': function (e) {

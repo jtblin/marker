@@ -42,6 +42,7 @@
         {{#if currentUser}}
             {{#if pageTemplateEquals "doc"}}
                 <input id="edit-doc" type="button" value="Edit" />
+                <input id="delete-doc" type="button" value="Delete" class="{{canDelete}}" />
             {{/if}}
             {{#if pageTemplateEquals "new"}}
                 <input id="save-doc" type="button" value="Save" />
