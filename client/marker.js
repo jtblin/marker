@@ -63,6 +63,8 @@ Template.header.events({
 		var doc = Documents.findOne({_id: Session.get('docId')});
 		if (doc)
 			Meteor.go(Meteor.docPath({docUri: doc.uri}));
+		else
+			Meteor.go(Meteor.rootPath());
 	},
 	'click #delete-doc': function () {
 		Meteor.call("deleteDocument", Session.get('docId'), function (error) {
