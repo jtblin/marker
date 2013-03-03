@@ -5,6 +5,7 @@ MK.app = {
 	init: function () {
 		l('MK.app.init()');
 		MK.events.stickyPane();
+		MK.events.infiniteScroll();
 	},
 	clearSession: function () {
 		Session.set("docId", null);
@@ -30,6 +31,9 @@ MK.app = {
 		_gaq.push(['_trackPageview']);
 	},
 	pageSize: 12,
+	maxPage: function () {
+		return Math.ceil(Documents.find().count()/MK.app.pageSize);
+	},
 	hideLoader: function () {
 		$('#header .loading').addClass('hidden');
 	},
@@ -131,7 +135,7 @@ Template.list.docs = function () {
 	if (doc) {
 		MK.app.setSessionVariables(doc);
 	}
-	return Documents.find({}, {skip: (pageIndex-1)*MK.app.pageSize, limit: pageIndex*MK.app.pageSize});
+	return Documents.find({}, {limit: pageIndex*MK.app.pageSize});
 };
 
 Template.list.events({

@@ -21,7 +21,7 @@ You can access the demo and create wikis on [http://marker.meteor.com/](http://m
 3. Delete wiki -done 
 3. Optimisation for tablets - done
 3. Allow entering title - done
-3. Infinite scroll
+3. Infinite scroll - done
 3. Feedback on save
 3. mark as private/public
 3. Projects namespaces
