@@ -20,11 +20,11 @@ body {
   background: #f4f4f4 url(/images/background.png);
   color: #000;
 }
-a, a:visited {
-  color: #444;
+a {
+  text-decoration: none;
 }
-a:active, a:hover {
-  color: #000;
+a, a:visited {
+  color: #4183c4;
 }
 a:hover {
   text-decoration: underline;
@@ -80,6 +80,11 @@ pre {
   padding: 2px 0 2px 15px;
   border-left: .5em solid #bbb;
   margin: 0px 0 30px;
+}
+
+pre>code {
+  border: none;
+  background: transparent;
 }
 
 #header {
