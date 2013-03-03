@@ -12,11 +12,11 @@ Meteor.methods({
 		options = options || {};
 		if (! (typeof options.title === "string" && options.title.length &&
 				typeof options.content === "string" && options.content.length))
-			throw new Meteor.Error(400, "Required parameter missing");
+			throw new Meteor.Error(400, "Title and/or content missing");
 		if (options.title.length > 100)
 			throw new Meteor.Error(413, "Title too long");
-		if (options.title.match(/_/))
-			throw new Meteor.Error(413, "Title cannot contain underscore");
+		if (options.title.match(/(_|\?)/))
+			throw new Meteor.Error(413, "Title cannot have `_` or `?` characters");
 		if (options.content.length > 10000)
 			throw new Meteor.Error(413, "Content too long");
 		if (! this.userId)
@@ -51,6 +51,8 @@ Meteor.methods({
 	updateDocument: function (docId, content) {
 		if (content.length > 10000)
 			throw new Meteor.Error(413, "Content too long");
+		if (content.length === 0)
+			throw new Meteor.Error(413, "Content can't be blank");
 		if (! this.userId)
 			throw new Meteor.Error(403, "You must be logged in");
 		if (! Documents.findOne({$and : [{_id : docId}, {$or : [{public: true}, {shared: this.userId}, {owner: this.userId}]}] }))
@@ -59,6 +61,8 @@ Meteor.methods({
 		return Documents.update({_id : docId}, {$set : {content: content} });
 	},
 	deleteDocument: function (docId) {
+		if (! this.userId)
+			throw new Meteor.Error(403, "You must be logged in");
 		if (! Documents.findOne({_id : docId, owner: this.userId }))
 			throw new Meteor.Error(403, "You don't have the rights to modify this document");
 		Documents.remove({_id : docId});
