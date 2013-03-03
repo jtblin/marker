@@ -75,6 +75,7 @@ Template.header.events({
 		});
 	},
 	'click #save-doc': function () {
+		MK.app.showLoader();
 		if (! Session.get('docId')) {
 			var title = Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', '');
 			var doc = {
@@ -84,6 +85,7 @@ Template.header.events({
 				uri: title.replace(/\s/g, '-')
 			};
 			Meteor.call("createDocument", doc, function (error, docId) {
+				MK.app.hideLoader();
 				if (! error)
 					Meteor.go(Meteor.editPath({docUri: doc.uri}));
 				else
@@ -91,6 +93,7 @@ Template.header.events({
 			});
 		} else {
 			Meteor.call("updateDocument", Session.get('docId'), Session.get('content'), function (error) {
+				MK.app.hideLoader();
 				if (error) alert(error.reason);
 			});
 		}
