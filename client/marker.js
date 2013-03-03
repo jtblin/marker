@@ -9,6 +9,7 @@ MK.app = {
 	clearSession: function () {
 		Session.set("docId", null);
 		Session.set("content", '');
+		Session.set("title", '');
 		Session.set("currentPage", 1);
 	},
 	converter: new Showdown.converter(),
@@ -16,10 +17,14 @@ MK.app = {
 		var doc = Documents.findOne({uri : context.params.docUri});
 		if (doc) {
 			if (Session.get("docId") !== doc._id) {
-				Session.set("docId", doc._id);
-				Session.set("content", doc.content);
+				MK.app.setSessionVariables(doc);
 			}
 		}
+	},
+	setSessionVariables: function (doc) {
+		Session.set("docId", doc._id);
+		Session.set("content", doc.content);
+		Session.set("title", doc.title);
 	},
 	setAnalytics: function () {
 		_gaq.push(['_trackPageview']);
@@ -30,6 +35,9 @@ MK.app = {
 	},
 	showLoader: function () {
 		$('#header .loading').removeClass('hidden');
+	},
+	getHtmlContent: function () {
+		return "<h1>" + Session.get('title') + "</h1><hr/>" + MK.app.converter.makeHtml(Session.get('content') || "");
 	}
 };
 
@@ -77,12 +85,11 @@ Template.header.events({
 	'click #save-doc': function () {
 		MK.app.showLoader();
 		if (! Session.get('docId')) {
-			var title = Session.get('content').replace(/^\n*/, '').split('\n').first().replace('#', '');
 			var doc = {
-				title: title,
+				title: Session.get('title'),
 				content: Session.get('content'),
 				public: true,
-				uri: title.replace(/\s/g, '-')
+				uri: Session.get('title').replace(/\s/g, '-')
 			};
 			Meteor.call("createDocument", doc, function (error, docId) {
 				MK.app.hideLoader();
@@ -92,7 +99,7 @@ Template.header.events({
 					alert(error.reason);
 			});
 		} else {
-			Meteor.call("updateDocument", Session.get('docId'), Session.get('content'), function (error) {
+			Meteor.call("updateDocument", Session.get('docId'), Session.get('title'), Session.get('content'), function (error) {
 				MK.app.hideLoader();
 				if (error) alert(error.reason);
 			});
@@ -122,8 +129,7 @@ Template.list.docs = function () {
 	var pageIndex = Session.get("currentPage"),
 			doc = Documents.findOne({});
 	if (doc) {
-		Session.set('content', doc.content);
-		Session.set('docId', doc._id);
+		MK.app.setSessionVariables(doc);
 	}
 	return Documents.find({}, {skip: (pageIndex-1)*MK.app.pageSize, limit: pageIndex*MK.app.pageSize});
 };
@@ -131,10 +137,7 @@ Template.list.docs = function () {
 Template.list.events({
 	'click .box': function (e) {
 		var doc = Documents.findOne({_id: this._id});
-		if (doc) {
-			Session.set('content', doc.content);
-			Session.set('docId', doc._id);
-		}
+		if (doc) MK.app.setSessionVariables(doc);
 		$('.active').removeClass('active').addClass('inactive');
 		$('#' + this._id).removeClass('inactive').addClass('active');
 	}
@@ -165,19 +168,26 @@ Template.search.events({
 Template.editor.events({
 	'keyup #input-pane': function (e) {
 		Session.set('content', e.target.value || "");
+	},
+	'keyup #input-title': function (e) {
+		Session.set('title', e.target.value || "");
 	}
 });
+
+Template.editor.title = function () {
+	return Session.get('title');
+};
 
 Template.editor.input = function () {
 	return Session.get('content');
 };
 
 Template.doc.content = function () {
-	return MK.app.converter.makeHtml(Session.get('content') || "");
+	return MK.app.getHtmlContent();
 };
 
 Template.preview.output = function () {
-	return MK.app.converter.makeHtml(Session.get('content') || "");
+	return MK.app.getHtmlContent();
 };
 
 Template.editor.rendered = function () {

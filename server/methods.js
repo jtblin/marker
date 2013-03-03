@@ -7,12 +7,12 @@
  */
 
 Meteor.methods({
-	// options should include: title, content
 	createDocument: function (options) {
+		// options should include: title, content
 		options = options || {};
 		if (! (typeof options.title === "string" && options.title.length &&
 				typeof options.content === "string" && options.content.length))
-			throw new Meteor.Error(400, "Title and/or content missing");
+			throw new Meteor.Error(400, "Title and/or content can't be blank");
 		if (options.title.length > 100)
 			throw new Meteor.Error(413, "Title too long");
 		if (options.title.match(/(_|\?)/))
@@ -21,7 +21,6 @@ Meteor.methods({
 			throw new Meteor.Error(413, "Content too long");
 		if (! this.userId)
 			throw new Meteor.Error(403, "You must be logged in");
-//		var uri = options.title.replace(/\s/g, '-');
 
 		var docId = Documents.insert({
 			owner: this.userId,
@@ -48,7 +47,11 @@ Meteor.methods({
 
 		return docId;
 	},
-	updateDocument: function (docId, content) {
+	updateDocument: function (docId, title, content) {
+		if (title.length > 100)
+			throw new Meteor.Error(413, "Title too long");
+		if (title.length === 0)
+			throw new Meteor.Error(413, "Title can't be blank");
 		if (content.length > 10000)
 			throw new Meteor.Error(413, "Content too long");
 		if (content.length === 0)
@@ -58,7 +61,7 @@ Meteor.methods({
 		if (! Documents.findOne({$and : [{_id : docId}, {$or : [{public: true}, {shared: this.userId}, {owner: this.userId}]}] }))
 			throw new Meteor.Error(403, "You don't have the rights to modify this document");
 
-		return Documents.update({_id : docId}, {$set : {content: content} });
+		return Documents.update({_id : docId}, {$set : {content: content, title: title} });
 	},
 	deleteDocument: function (docId) {
 		if (! this.userId)

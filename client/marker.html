@@ -115,7 +115,8 @@
 </template>
 
 <template name="editor">
-    <textarea id="input-pane" cols="80" rows="20">{{{input}}}</textarea>
+    <input type="text" id="input-title" placeholder="Title" value="{{{title}}}" />
+    <textarea id="input-pane" cols="80" rows="20" placeholder="Type the content of the wiki here">{{{input}}}</textarea>
 </template>
 
 <template name="preview">
