@@ -4,6 +4,7 @@ var MK = MK || {};
 MK.app = {
 	init: function () {
 		l('MK.app.init()');
+		Session.set("currentPage", 1);
 		MK.events.stickyPane();
 		MK.events.infiniteScroll();
 	},
@@ -206,8 +207,6 @@ Template.preview.rendered = function () {
 
 // Subscriptions
 
-Session.set("currentPage", 1);
-
 Meteor.autorun(function () {
 	Meteor.subscribe('documents', MK.app.hideLoader);
 });
@@ -220,6 +219,8 @@ Meteor.pages({
 	'/:docUri/edit': {to: 'edit', before: [MK.app.setAnalytics, MK.app.setDoc]},
 	'/': { to: 'home', as: 'root', before: [MK.app.setAnalytics, MK.app.clearSession] }
 });
+
+// Startup
 
 Meteor.startup(function () {
 	l('Meteor.startup(client)');
