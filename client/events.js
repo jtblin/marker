@@ -15,8 +15,10 @@ var MK = $.extend({}, MK || {});
 
 MK.events = {
   resizeCanvas: function () {
-      $('#input-pane').css('height', window.innerHeight - 80);
-      $('#output-pane').css('height', window.innerHeight - 50);
+	  $('#input-pane').css('height', window.innerHeight - 80);
+	  $('#output-pane').css('height', window.innerHeight - 50);
+	  $('.save').css('top', window.innerHeight - 50);
+	  $('.save').css('left', window.innerWidth/2 - 25);
   },
 	stickyPane: function () {
 		if ($("#sticky").length) {

@@ -43,6 +43,12 @@ MK.app = {
 	},
 	getHtmlContent: function () {
 		return "<h1>" + Session.get('title') + "</h1><hr/>" + MK.app.converter.makeHtml(Session.get('content') || "");
+	},
+	showSavedMsg: function () {
+		$('#save-msg').html('Saved.');
+		setTimeout(function () {
+			$('#save-msg').fadeOut();
+		}, 3000);
 	}
 };
 
@@ -89,6 +95,8 @@ Template.header.events({
 	},
 	'click #save-doc': function () {
 		MK.app.showLoader();
+		$('#save-msg').html('Saving...');
+		$('#save-msg').fadeIn();
 		if (! Session.get('docId')) {
 			var doc = {
 				title: Session.get('title'),
@@ -98,6 +106,7 @@ Template.header.events({
 			};
 			Meteor.call("createDocument", doc, function (error, docId) {
 				MK.app.hideLoader();
+				MK.app.showSavedMsg();
 				if (! error)
 					Meteor.go(Meteor.editPath({docUri: doc.uri}));
 				else
@@ -106,6 +115,7 @@ Template.header.events({
 		} else {
 			Meteor.call("updateDocument", Session.get('docId'), Session.get('title'), Session.get('content'), function (error) {
 				MK.app.hideLoader();
+				MK.app.showSavedMsg();
 				if (error) alert(error.reason);
 			});
 		}

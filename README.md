@@ -22,7 +22,8 @@ You can access the demo and create wikis on [http://marker.meteor.com/](http://m
 3. Optimisation for tablets - done
 3. Allow entering title - done
 3. Infinite scroll - done
-3. Feedback on save
+3. Feedback on save - done
+3. add timestamps
 3. mark as private/public
 3. Markdown syntax helper
 3. Projects namespaces
@@ -33,6 +34,7 @@ You can access the demo and create wikis on [http://marker.meteor.com/](http://m
 4. Sidebar
 4. Multi edit
 4. History
+5. Concurrent editing
 5. Social sharing
 6. Keyboards shortcuts
 7. Rich-text toolbar
