@@ -48,6 +48,7 @@
         {{#if pageTemplateIn "new" "edit"}}
             <input id="save-doc" type="button" value="Save" />
             <input id="cancel-edit" type="button" value="Cancel" />
+            {{> toolbar }}
         {{/if}}
         {{#constant}}<img class="loading" src="/images/ajax-loader.gif" />{{/constant}}
     </div>
@@ -122,6 +123,10 @@
 
 <template name="preview">
     <div id="output-pane">{{{output}}}</div>
+</template>
+
+<template name="toolbar">
+    <span class="{{canPublish}}"><input type="checkbox" {{checked}} style="margin-right: 5px">Public</span>
 </template>
 
 <!--Unused-->

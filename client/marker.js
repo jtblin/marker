@@ -97,11 +97,12 @@ Template.header.events({
 		MK.app.showLoader();
 		$('#save-msg').html('Saving...');
 		$('#save-msg').fadeIn();
+		var isPublic = $('#header input[type=checkbox]').attr('checked') === 'checked' ? true : false;
 		if (! Session.get('docId')) {
 			var doc = {
 				title: Session.get('title'),
 				content: Session.get('content'),
-				public: true,
+				public: isPublic,
 				uri: Session.get('title').replace(/\s/g, '-')
 			};
 			Meteor.call("createDocument", doc, function (error, docId) {
@@ -113,7 +114,7 @@ Template.header.events({
 					alert(error.reason);
 			});
 		} else {
-			Meteor.call("updateDocument", Session.get('docId'), Session.get('title'), Session.get('content'), function (error) {
+			Meteor.call("updateDocument", Session.get('docId'), Session.get('title'), Session.get('content'), isPublic, function (error) {
 				MK.app.hideLoader();
 				MK.app.showSavedMsg();
 				if (error) alert(error.reason);
@@ -137,6 +138,26 @@ Template.header.events({
 		}
 	}
 });
+
+Template.toolbar.checked = function () {
+	var doc = Documents.findOne({_id: Session.get('docId')});
+	if (doc)
+		return doc.public ? "checked" : "";
+	else
+		return "checked";
+};
+
+Template.toolbar.events({
+	'click span': function (e) {
+		if (typeof e.target.checked === 'undefined')
+			e.target.children[0].checked = e.target.children[0].checked ? false : true;
+	}
+});
+
+Template.toolbar.canPublish = function () {
+	var doc = Documents.findOne({_id: Session.get('docId')});
+	return (doc && doc.owner === Meteor.userId()) ? "" : "hide";
+};
 
 // Home
 

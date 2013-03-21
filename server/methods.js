@@ -47,7 +47,7 @@ Meteor.methods({
 
 		return docId;
 	},
-	updateDocument: function (docId, title, content) {
+	updateDocument: function (docId, title, content, isPublic) {
 		if (title.length > 100)
 			throw new Meteor.Error(413, "Title too long");
 		if (title.length === 0)
@@ -61,7 +61,7 @@ Meteor.methods({
 		if (! Documents.findOne({$and : [{_id : docId}, {$or : [{public: true}, {shared: this.userId}, {owner: this.userId}]}] }))
 			throw new Meteor.Error(403, "You don't have the rights to modify this document");
 
-		return Documents.update({_id : docId}, {$set : {content: content, title: title} });
+		return Documents.update({_id : docId}, {$set : {content: content, title: title, public: isPublic} });
 	},
 	deleteDocument: function (docId) {
 		if (! this.userId)
