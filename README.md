@@ -24,7 +24,7 @@ You can access the demo and create wikis on [http://marker.meteor.com/](http://m
 3. Infinite scroll - done
 3. Feedback on save - done
 3. mark as private/public - done
-3. add timestamps
+3. add timestamps - done
 3. Markdown syntax helper
 3. Projects namespaces
 3. Tags

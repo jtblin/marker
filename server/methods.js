@@ -28,6 +28,7 @@ Meteor.methods({
 			content: options.content,
 			public: !! options.public,
 			uri: options.uri,
+			createdAt: Date.now(),
 			shared: []
 		});
 
@@ -61,7 +62,7 @@ Meteor.methods({
 		if (! Documents.findOne({$and : [{_id : docId}, {$or : [{public: true}, {shared: this.userId}, {owner: this.userId}]}] }))
 			throw new Meteor.Error(403, "You don't have the rights to modify this document");
 
-		return Documents.update({_id : docId}, {$set : {content: content, title: title, public: isPublic} });
+		return Documents.update({_id : docId}, {$set : {content: content, title: title, public: isPublic, updatedAt: Date.now()} });
 	},
 	deleteDocument: function (docId) {
 		if (! this.userId)
