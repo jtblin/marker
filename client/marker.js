@@ -97,9 +97,8 @@ Template.header.events({
 	},
 	'click #save-doc': function () {
 		MK.app.showLoader();
-		$('#save-msg').html('Saving...');
-		$('#save-msg').fadeIn();
-		var isPublic = $('#header input[type=checkbox]').attr('checked') === 'checked' ? true : false;
+		$('#save-msg').html('Saving...').fadeIn();
+		var isPublic = !!($('#header input[type=checkbox]').attr('checked') === 'checked');
 		if (! Session.get('docId')) {
 			var doc = {
 				title: Session.get('title'),
@@ -128,7 +127,7 @@ Template.header.events({
 			// 27 = escape
 			$('#search').addClass('hide');
 		} else {
-			$('#header .loading').removeClass('hidden');
+			$('.loading').removeClass('hidden');
 			Session.set('searchText', e.target.value);
 			$('#search').removeClass('hide');
 		}
@@ -144,27 +143,82 @@ Template.header.events({
 Template.toolbar.checked = function () {
 	var doc = Documents.findOne({_id: Session.get('docId')});
 	if (doc)
-		return doc.public ? "checked" : "";
+		return doc.public ? 'checked' : '';
 	else
 		return "checked";
+};
+
+Template.toolbar.canPublish = function () {
+	var doc = Documents.findOne({_id: Session.get('docId')});
+	return (! doc || doc.owner === Meteor.userId()) ? '' : 'hide';
+};
+
+Template.toolbar.tags = function () {
+	var doc = Documents.findOne({_id: Session.get('docId')});
+	return (doc && doc.tags && doc.tags.length > 0) ? doc.tags : 'click to add tags';
 };
 
 Template.toolbar.events({
 	'click span': function (e) {
 		if (typeof e.target.checked === 'undefined')
 			e.target.children[0].checked = e.target.children[0].checked ? false : true;
-	}
+	},
+	'click .tags': function (e) {
+		if (e.target.innerHTML === 'click to add tags')
+			e.target.innerHTML = '';
+    removeTagHighlight ();
+    $('.tag').removeClass('display').addClass('write');
+	},
+  'click .tag': function (e) {
+    e.stopDefault();
+    removeTagHighlight ();
+    var $tag = $(e.target), html = $tag.html();
+    $tag.addClass('highlight');
+    $tag.html('<div>'+html+'</div><a class="box-close"></a>');
+	},
+	'blur .tags': function (e) {
+		if ($.trim(e.target.innerHTML) === '')
+			e.target.innerHTML = 'click to add tags';
+		$('.tag').removeClass('write').addClass('display');
+    var tags = $('.tags').text().replace(/\n/g, '').split(' ').filter(function (tag) {
+      return ($.trim(tag) !== '');
+    });
+    // add tags to mongo
+    Meteor.call("updateTags", Session.get('docId'), tags, function (error) {
+      if (error) alert(error.reason);
+    });
+	},
+  'click .box-close': function (e) {
+    e.stopDefault();
+    $(e.target.parentElement).remove();
+    $('.tags').trigger('blur');
+  }
 });
 
-Template.toolbar.canPublish = function () {
+function removeTagHighlight () {
+  $('.highlight').each(function (idx, tag) {
+    tag = $(tag);
+    tag.html($.trim(tag.text()));
+  });
+  $('.tag').removeClass('highlight');
+}
+
+Template.tags.tags = function () {
 	var doc = Documents.findOne({_id: Session.get('docId')});
-	return (doc && doc.owner === Meteor.userId()) ? "" : "hide";
+	return (doc && doc.tags && doc.tags.length > 0) ? doc.tags : [];
 };
+
+Template.tags.rendered = function () {
+	var doc = Documents.findOne({_id: Session.get('docId')});
+	if (! (doc && doc.tags && doc.tags.length > 0))
+		$('.tags').html('click to add tags');
+};
+
 
 // Home
 
 Template.list.docs = function () {
-	var pageIndex = Session.get("currentPage"),
+	var pageIndex = Session.get('currentPage'),
 			doc = Documents.findOne({});
 	if (doc) {
 		MK.app.setSessionVariables(doc);

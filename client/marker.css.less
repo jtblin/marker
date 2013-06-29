@@ -109,6 +109,53 @@ pre>code {
   span {
     cursor: pointer;
   }
+
+  .tags{
+    border-left: 1px solid #ccc;
+    padding: 4px 10px;
+    margin-left: 8px;
+    color: #ccc;
+    display: inline-block;
+    width: 50%;
+    font-size: 12px;
+
+    .tag {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .display {
+      border: 1px solid #000000;
+      color: #000000;
+      padding: 0px 20px;
+      background-color: #ffffff;
+      border-radius: 10px;
+    }
+
+    .write {
+      color: #000000;
+    }
+
+    .highlight {
+      background-color: #cccccc;
+    }
+  }
+}
+
+.chk-public {
+  font-size: 0.9em;
+}
+
+.box-close{
+  float:right;
+  margin-top:-25px;
+  margin-right:-15px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.box-close:before {
+  content: "×";
 }
 
 #login-buttons {

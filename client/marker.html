@@ -127,7 +127,16 @@
 </template>
 
 <template name="toolbar">
-    <span class="{{canPublish}}"><input type="checkbox" {{checked}} style="margin-right: 5px">Public</span>
+    <span class="{{canPublish}} chk-public"><input type="checkbox" {{checked}}>Public</span>
+    {{#if pageTemplateEquals "edit"}}
+    <div class="tags" contenteditable="true">{{> tags}}</div>
+    {{/if}}
+</template>
+
+<template name="tags">
+    {{#each tags}}
+        <div class="tag display">{{.}}</div>
+    {{/each}}
 </template>
 
 <!--Unused-->
