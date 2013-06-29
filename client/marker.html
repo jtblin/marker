@@ -21,14 +21,15 @@
 </body>
 
 <template name="layout">
-    {{> header}}
-    <div id="content">
-        <div id="canvas-wrapper">
-            <div id="canvas" class="fancy-scrollbar">
-                {{{yield}}}
-            </div>
-        </div>
-    </div>
+  {{> header}}
+  <div id="content" class="hide">
+      <div id="canvas-wrapper">
+          <div id="canvas" class="fancy-scrollbar">
+              {{{yield}}}
+          </div>
+      </div>
+  </div>
+  <div class="loading-bar"><img src="/images/ajax-loader-bar.gif"/></div>
 </template>
 
 <template name="header">

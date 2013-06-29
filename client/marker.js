@@ -7,6 +7,7 @@ MK.app = {
 		Session.set("currentPage", 1);
 		MK.events.stickyPane();
 		MK.events.infiniteScroll();
+    $('.loading-bar').css('line-height', window.innerHeight - 80 + 'px').height(window.innerHeight - 80);
 	},
 	clearSession: function () {
 		Session.set("docId", null);
@@ -36,10 +37,11 @@ MK.app = {
 		return Math.ceil(Documents.find().count()/MK.app.pageSize);
 	},
 	hideLoader: function () {
-		$('#header .loading').addClass('hidden');
+		$('.loading, .loading-bar').addClass('hidden');
+    $('#content').removeClass('hide');
 	},
 	showLoader: function () {
-		$('#header .loading').removeClass('hidden');
+		$('.loading').removeClass('hidden');
 	},
 	getHtmlContent: function () {
 		return "<h1>" + Session.get('title') + "</h1><hr/>" + MK.app.converter.makeHtml(Session.get('content') || "");
