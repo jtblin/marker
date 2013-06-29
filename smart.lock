@@ -2,15 +2,9 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "router": {},
       "mini-pages": {}
     },
     "packages": {
-      "router": {
-        "git": "https://github.com/tmeasday/meteor-router.git",
-        "tag": "v0.5.1",
-        "commit": "32e377c7703bb119acccc859fc7296882903cbe7"
-      },
       "mini-pages": {
         "git": "https://github.com/cmather/meteor-mini-pages.git",
         "tag": "v0.3.1",
