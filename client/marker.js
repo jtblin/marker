@@ -1,5 +1,5 @@
 // Marker
-var MK = MK || {};
+MK = window.MK || {};
 
 MK.app = {
 	init: function () {
