@@ -1,5 +1,5 @@
 // Marker
-MK = window.MK || {};
+MK = window.MK = window.MK || {};
 
 MK.app = {
 	init: function () {
@@ -7,7 +7,7 @@ MK.app = {
 		Session.set("currentPage", 1);
 		MK.events.stickyPane();
 		MK.events.infiniteScroll();
-    $('.loading-bar').css('line-height', window.innerHeight - 80 + 'px').height(window.innerHeight - 80);
+    MK.router.init();
 	},
 	clearSession: function () {
 		Session.set("docId", null);
@@ -17,15 +17,18 @@ MK.app = {
 	},
 	converter: new Showdown.converter(),
 	setDoc: function (context) {
-		var doc = Documents.findOne({uri : context.params.docUri});
+		var doc = Documents.findOne({ns: context.params.namespace, uri: context.params.docUri});
 		if (doc) {
 			if (Session.get("docId") !== doc._id) {
 				MK.app.setSessionVariables(doc);
 			}
-		}
+		} else {
+      // TODO: 404
+    }
 	},
 	setSessionVariables: function (doc) {
 		Session.set("docId", doc._id);
+		Session.set("namespace", doc.ns);
 		Session.set("content", doc.content);
 		Session.set("title", doc.title);
 	},
@@ -46,19 +49,16 @@ MK.app = {
 	getHtmlContent: function () {
 		return "<h1>" + Session.get('title') + "</h1><hr/>" + MK.app.converter.makeHtml(Session.get('content') || "");
 	},
-	showSavedMsg: function () {
-		$('#save-msg').html('Saved.');
+	showSaveMsg: function (msg) {
+		$('#save-msg').html(msg);
 		setTimeout(function () {
 			$('#save-msg').fadeOut();
 		}, 3000);
-	}
-};
+	}};
 
-// Window
+// Global events
 
-window.onresize = function (e) {
-	MK.events.resizeCanvas();
-};
+window.onresize = MK.events.resizeCanvas;
 
 window.onclick = function (e) {
 	$('#search').addClass('hide');
@@ -78,12 +78,12 @@ Template.header.events({
 	'click #edit-doc': function () {
 		var doc = Documents.findOne({_id: Session.get('docId')});
 		if (doc)
-			Meteor.go(Meteor.editPath({docUri: doc.uri}));
+			Meteor.go(Meteor.editPath({ns: doc.ns, docUri: doc.uri}));
 	},
 	'click #cancel-edit': function () {
 		var doc = Documents.findOne({_id: Session.get('docId')});
 		if (doc)
-			Meteor.go(Meteor.docPath({docUri: doc.uri}));
+			Meteor.go(Meteor.docPath({ns: doc.ns, docUri: doc.uri}));
 		else
 			Meteor.go(Meteor.rootPath());
 	},
@@ -98,29 +98,28 @@ Template.header.events({
 	'click #save-doc': function () {
 		MK.app.showLoader();
 		$('#save-msg').html('Saving...').fadeIn();
-		var isPublic = !!($('#header input[type=checkbox]').attr('checked') === 'checked');
-		if (! Session.get('docId')) {
-			var doc = {
-				title: Session.get('title'),
-				content: Session.get('content'),
-				public: isPublic,
-				uri: Session.get('title').replace(/\s/g, '-')
-			};
-			Meteor.call("createDocument", doc, function (error, docId) {
-				MK.app.hideLoader();
-				MK.app.showSavedMsg();
-				if (! error)
-					Meteor.go(Meteor.editPath({docUri: doc.uri}));
-				else
-					alert(error.reason);
-			});
-		} else {
-			Meteor.call("updateDocument", Session.get('docId'), Session.get('title'), Session.get('content'), isPublic, function (error) {
-				MK.app.hideLoader();
-				MK.app.showSavedMsg();
-				if (error) alert(error.reason);
-			});
-		}
+    var doc = {
+      title: Session.get('title'),
+      content: Session.get('content'),
+      public: !!($('#header input[type=checkbox]').attr('checked') === 'checked'),
+      uri: Session.get('title').replace(/\s/g, '-'),
+      ns: $.trim($('#input-namespace').val())
+    };
+    if (! doc.ns.match(/^\//)) doc.ns = '/' + doc.ns;
+		if (! Session.get('docId'))
+			Meteor.call("createDocument", doc, callback);
+		else
+			Meteor.call("updateDocument", Session.get('docId'), doc, callback);
+
+    function callback (error) {
+      MK.app.hideLoader();
+      if (error)
+        MK.app.showSaveMsg('Error: ' + error.reason);
+      else {
+        MK.app.showSaveMsg('Saved.');
+        Meteor.go(Meteor.editPath({ns: doc.ns, docUri: doc.uri}));
+      }
+    }
 	},
 	'keyup #search-text': function (e) {
 		if (e.which === 27) {
@@ -213,7 +212,6 @@ Template.tags.rendered = function () {
 		$('.tags').html('click to add tags');
 };
 
-
 // Home
 
 Template.list.docs = function () {
@@ -233,6 +231,11 @@ Template.list.events({
 		$('#' + this._id).removeClass('inactive').addClass('active');
 	}
 });
+
+Template.list.rendered = function () {
+  var height = window.innerHeight - 80;
+  $('.loading-bar').css('line-height', height + 'px').height(height - 80);
+};
 
 // Search (not implemented)
 
@@ -269,6 +272,10 @@ Template.editor.title = function () {
 	return Session.get('title');
 };
 
+Template.editor.namespace = function () {
+  return Meteor.router.template() === 'new' ? document.location.pathname.replace(/\/new\/?$/, '') : Session.get('namespace');
+};
+
 Template.editor.input = function () {
 	return Session.get('content');
 };
@@ -295,15 +302,6 @@ Template.preview.rendered = function () {
 
 Meteor.autorun(function () {
 	Meteor.subscribe('documents', MK.app.hideLoader);
-});
-
-// Router
-
-Meteor.pages({
-	'/new': {to: 'new', before: [MK.app.setAnalytics, MK.app.clearSession] },
-	'/:docUri': {to: 'doc', before: [MK.app.setAnalytics, MK.app.setDoc]},
-	'/:docUri/edit': {to: 'edit', before: [MK.app.setAnalytics, MK.app.setDoc]},
-	'/': { to: 'home', as: 'root', before: [MK.app.setAnalytics, MK.app.clearSession] }
 });
 
 // Startup

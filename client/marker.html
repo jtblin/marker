@@ -83,9 +83,9 @@
     {{#each docs}}
     <div class="box {{activeBox _id}}" id="{{_id}}">
         {{#if currentUser}}
-            <a href="{{uri}}/edit">{{title}}</a>
+            <a href="{{ns}}/{{uri}}/edit">{{title}}</a>
         {{else}}
-            <a href="{{uri}}">{{title}}</a>
+            <a href="{{ns}}/{{uri}}">{{title}}</a>
         {{/if}}
         <div class="sm-preview">{{{convert content}}}</div>
     </div>
@@ -118,8 +118,11 @@
 </template>
 
 <template name="editor">
-    <input type="text" id="input-title" placeholder="Title" value="{{{title}}}" />
-    <textarea id="input-pane" cols="80" rows="20" placeholder="Type the content of the wiki here">{{{input}}}</textarea>
+  <div>
+    <input type="text" id="input-title" class="input-editor" placeholder="Title" value="{{{title}}}" />
+    <input type="text" id="input-namespace" class="input-editor" placeholder="/namespace" value="{{{namespace}}}" />
+  </div>
+  <textarea id="input-pane" placeholder="Type the content of the wiki here">{{{input}}}</textarea>
 </template>
 
 <template name="preview">

@@ -7,7 +7,7 @@
  */
 
 
-MK = window.MK || {};
+MK = window.MK = window.MK || {};
 
 MK.events = {
   resizeCanvas: function () {
