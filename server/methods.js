@@ -1,11 +1,3 @@
-/**
- * Created with JetBrains WebStorm.
- * User: jtouffeblin
- * Date: 27/10/12
- * Time: 8:17 PM
- * To change this template use File | Settings | File Templates.
- */
-
 Meteor.methods({
   createDocument: function (doc) {
     doc = validate(doc);

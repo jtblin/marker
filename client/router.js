@@ -1,11 +1,3 @@
-/**
- * Created with JetBrains WebStorm.
- * User: jtouffeblin
- * Date: 07/07/13
- * Time: 5:17 PM
- * To change this template use File | Settings | File Templates.
- */
-
 MK = window.MK = window.MK || {};
 
 MK.router = {
