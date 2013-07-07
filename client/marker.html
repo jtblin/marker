@@ -1,19 +1,19 @@
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Marker</title>
-    <script type="text/javascript">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marker</title>
+  <script type="text/javascript">
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-35891174-1']);
-        _gaq.push(['_trackPageview']);
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35891174-1']);
+    _gaq.push(['_trackPageview']);
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
 
-    </script>
+  </script>
 </head>
 
 <body>
@@ -23,98 +23,98 @@
 <template name="layout">
   {{> header}}
   <div id="content" class="hide">
-      <div id="canvas-wrapper">
-          <div id="canvas" class="fancy-scrollbar">
-              {{{yield}}}
-          </div>
+    <div id="canvas-wrapper">
+      <div id="canvas" class="fancy-scrollbar">
+        {{{yield}}}
       </div>
+    </div>
   </div>
   <div class="loading-bar"><img src="/images/ajax-loader-bar.gif"/></div>
 </template>
 
 <template name="header">
-    <div id="header">
-        <span id="home"><a class="logo" href="{{rootPath}}">Marker</a></span>
-        <div id="login-buttons">
-            {{loginButtons align="right"}}
-        </div>
-        <input id="new-doc" type="button" value="New" />
-        <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
-        {{#if pageTemplateEquals "doc"}}
-            <input id="edit-doc" type="button" value="Edit" />
-        {{/if}}
-        {{#if pageTemplateIn "home" "doc"}}
-            <input id="delete-doc" type="button" value="Delete" class="{{canDelete}}" />
-        {{/if}}
-        {{#if pageTemplateIn "new" "edit"}}
-            <input id="save-doc" type="button" value="Save" />
-            <input id="cancel-edit" type="button" value="Cancel" />
-            {{> toolbar }}
-        {{/if}}
-        {{#constant}}<img class="loading" src="/images/ajax-loader.gif" />{{/constant}}
+  <div id="header">
+    <span id="home"><a class="logo" href="{{rootPath}}">Marker</a></span>
+    <div id="login-buttons">
+      {{loginButtons align="right"}}
     </div>
+    <input id="new-doc" type="button" value="New" />
+    <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
+    {{#if pageTemplateEquals "doc"}}
+    <input id="edit-doc" type="button" value="Edit" />
+    {{/if}}
+    {{#if pageTemplateIn "home" "doc"}}
+    <input id="delete-doc" type="button" value="Delete" class="{{canDelete}}" />
+    {{/if}}
+    {{#if pageTemplateIn "new" "edit"}}
+    <input id="save-doc" type="button" value="Save" />
+    <input id="cancel-edit" type="button" value="Cancel" />
+    {{> toolbar }}
+    {{/if}}
+    {{#constant}}<img class="loading" src="/images/ajax-loader.gif" />{{/constant}}
+  </div>
 </template>
 
 <template name="search">
-    <ul>
-        {{#each results}}
-        <li doc-id="{{_id}}">
-            <div>title</div>
-            <div class="snippet-xs">content</div>
-        </li>
-        {{/each }}
-    </ul>
+  <ul>
+    {{#each results}}
+    <li doc-id="{{_id}}">
+      <div>title</div>
+      <div class="snippet-xs">content</div>
+    </li>
+    {{/each }}
+  </ul>
 </template>
 
 <template name="home">
-    <div id="left-pane">
-        {{> list}}
+  <div id="left-pane">
+    {{> list}}
+  </div>
+  <div id="right-pane" style="margin-top: 10px; right: auto">
+    <div class="right-wrap">
+      <div id="sticky">
+        {{> preview}}
+      </div>
     </div>
-    <div id="right-pane" style="margin-top: 10px; right: auto">
-        <div class="right-wrap">
-            <div id="sticky">
-                {{> preview}}
-            </div>
-        </div>
-    </div>
+  </div>
 </template>
 
 <template name="list">
-    {{#each docs}}
-    <div class="box {{activeBox _id}}" id="{{_id}}">
-        {{#if currentUser}}
-            <a href="{{ns}}/{{uri}}/edit">{{title}}</a>
-        {{else}}
-            <a href="{{ns}}/{{uri}}">{{title}}</a>
-        {{/if}}
-        <div class="sm-preview">{{{convert content}}}</div>
-    </div>
-    {{/each }}
+  {{#each docs}}
+  <div class="box {{activeBox _id}}" id="{{_id}}">
+    {{#if currentUser}}
+    <a href="{{ns}}/{{uri}}/edit">{{title}}</a>
+    {{else}}
+    <a href="{{ns}}/{{uri}}">{{title}}</a>
+    {{/if}}
+    <div class="sm-preview">{{{convert content}}}</div>
+  </div>
+  {{/each }}
 </template>
 
 <template name="new">
-    <div id="left-pane">
-        {{> editor}}
-    </div>
-    <div id="right-pane">
-        {{> preview}}
-    </div>
+  <div id="left-pane">
+    {{> editor}}
+  </div>
+  <div id="right-pane">
+    {{> preview}}
+  </div>
 </template>
 
 <template name="edit">
-    <div id="left-pane" class="edit">
-        {{> editor}}
-    </div>
-    <div id="right-pane">
-        {{> preview}}
-    </div>
-    {{#constant}}<div id="save-msg" class="save hide">Saving...</div>{{/constant}}
+  <div id="left-pane" class="edit">
+    {{> editor}}
+  </div>
+  <div id="right-pane">
+    {{> preview}}
+  </div>
+  {{#constant}}<div id="save-msg" class="save hide">Saving...</div>{{/constant}}
 </template>
 
 <template name="doc">
-    <div class="container">
-        {{{content}}}
-    </div>
+  <div class="container">
+    {{{content}}}
+  </div>
 </template>
 
 <template name="editor">
@@ -126,29 +126,29 @@
 </template>
 
 <template name="preview">
-    <div id="output-pane">{{{output}}}</div>
+  <div id="output-pane">{{{output}}}</div>
 </template>
 
 <template name="toolbar">
-    <span class="{{canPublish}} chk-public"><input type="checkbox" {{checked}}>Public</span>
-    {{#if pageTemplateEquals "edit"}}
-    <div class="tags" contenteditable="true">{{> tags}}</div>
-    {{/if}}
+  <span class="{{canPublish}} chk-public"><input type="checkbox" {{checked}}>Public</span>
+  {{#if pageTemplateEquals "edit"}}
+  <div class="tags" contenteditable="true">{{> tags}}</div>
+  {{/if}}
 </template>
 
 <template name="tags">
-    {{#each tags}}
-        <div class="tag display">{{.}}</div>
-    {{/each}}
+  {{#each tags}}
+  <div class="tag display">{{.}}</div>
+  {{/each}}
 </template>
 
 <!--Unused-->
 
 <template name="email">
-    <html>
-        <body>
-        Your document has been created and you can access it at any time at this url:
-        <a href="{{{url}}}">{{{url}}}</a>
-        </body>
-    </html>
+  <html>
+  <body>
+  Your document has been created and you can access it at any time at this url:
+  <a href="{{{url}}}">{{{url}}}</a>
+  </body>
+  </html>
 </template>

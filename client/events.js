@@ -50,6 +50,6 @@ MK.events = {
 };
 
 Event.prototype.stopDefault = function () {
-    this.stopPropagation();
-    this.preventDefault();
+  this.stopPropagation();
+  this.preventDefault();
 };

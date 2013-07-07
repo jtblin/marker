@@ -1,5 +1,5 @@
 Array.prototype.first = function () {
-    return this.length ? this[0] : null;
+  return this.length ? this[0] : null;
 };
 
 Array.prototype.last = function () {
@@ -7,5 +7,5 @@ Array.prototype.last = function () {
 };
 
 l = function (text) {
-	console.log(text);
+  console.log(text);
 };

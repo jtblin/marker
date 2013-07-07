@@ -6,8 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 Accounts.ui.config({
-    passwordSignupFields: 'USERNAME_AND_EMAIL',
-    requestPermissions: {
-        facebook: ['publish_actions', 'email']
-    }
+  passwordSignupFields: 'USERNAME_AND_EMAIL',
+  requestPermissions: {
+    facebook: ['publish_actions', 'email']
+  }
 });
