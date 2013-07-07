@@ -43,7 +43,7 @@ Meteor.methods({
 			});
 		}
 		catch (e) {
-			l('====== Cannot send email for document ' + docId + '======')
+			console.log('====== Cannot send email for document ' + docId + '======')
 		}
 
 		return docId;

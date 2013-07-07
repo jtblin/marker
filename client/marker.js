@@ -3,7 +3,7 @@ MK = window.MK || {};
 
 MK.app = {
 	init: function () {
-		l('MK.app.init()');
+		console.log('MK.app.init()');
 		Session.set("currentPage", 1);
 		MK.events.stickyPane();
 		MK.events.infiniteScroll();
@@ -183,7 +183,6 @@ Template.toolbar.events({
     var tags = $('.tags').text().replace(/\n/g, '').split(' ').filter(function (tag) {
       return ($.trim(tag) !== '');
     });
-    // add tags to mongo
     Meteor.call("updateTags", Session.get('docId'), tags, function (error) {
       if (error) alert(error.reason);
     });
@@ -238,7 +237,7 @@ Template.list.events({
 // Search (not implemented)
 
 Template.search.results = function () {
-	l('Template.search.results not implemented');
+	console.log('Template.search.results not implemented');
 	return [];
 };
 
@@ -251,7 +250,7 @@ Template.search.events({
 		e.currentTarget.className = (e.type == 'mouseover') ? 'hover' : '';
 	},
 	'click li': function (e) {
-		l('Template.search.events click li not implemented');
+		console.log('Template.search.events click li not implemented');
 	}
 });
 
@@ -310,6 +309,6 @@ Meteor.pages({
 // Startup
 
 Meteor.startup(function () {
-	l('Meteor.startup(client)');
+	console.log('Meteor.startup(client)');
 	MK.app.init();
 });
