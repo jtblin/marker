@@ -44,3 +44,10 @@ Event.prototype.stopDefault = function () {
   this.stopPropagation();
   this.preventDefault();
 };
+
+// Global events
+window.onresize = MK.events.resizeCanvas;
+
+window.onclick = function (e) {
+  $('#search').addClass('hide');
+};

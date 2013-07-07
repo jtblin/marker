@@ -1,68 +1,4 @@
-// Marker
 MK = window.MK = window.MK || {};
-
-MK.app = {
-  init: function () {
-    console.log('MK.app.init()');
-    Session.set("currentPage", 1);
-    MK.events.stickyPane();
-    MK.events.infiniteScroll();
-    MK.router.init();
-  },
-  clearSession: function () {
-    Session.set("docId", null);
-    Session.set("content", '');
-    Session.set("title", '');
-    Session.set("currentPage", 1);
-  },
-  converter: new Showdown.converter(),
-  setDoc: function (context) {
-    var doc = Documents.findOne({ns: context.params.namespace, uri: context.params.docUri});
-    if (doc) {
-      if (Session.get("docId") !== doc._id) {
-        MK.app.setSessionVariables(doc);
-      }
-    } else {
-      // TODO: 404
-    }
-  },
-  setSessionVariables: function (doc) {
-    Session.set("docId", doc._id);
-    Session.set("namespace", doc.ns);
-    Session.set("content", doc.content);
-    Session.set("title", doc.title);
-  },
-  setAnalytics: function () {
-    _gaq.push(['_trackPageview']);
-  },
-  pageSize: 12,
-  maxPage: function () {
-    return Math.ceil(Documents.find().count()/MK.app.pageSize);
-  },
-  hideLoader: function () {
-    $('.loading, .loading-bar').addClass('hidden');
-    $('#content').removeClass('hide');
-  },
-  showLoader: function () {
-    $('.loading').removeClass('hidden');
-  },
-  getHtmlContent: function () {
-    return "<h1>" + Session.get('title') + "</h1><hr/>" + MK.app.converter.makeHtml(Session.get('content') || "");
-  },
-  showSaveMsg: function (msg) {
-    $('#save-msg').html(msg);
-    setTimeout(function () {
-      $('#save-msg').fadeOut();
-    }, 3000);
-  }};
-
-// Global events
-
-window.onresize = MK.events.resizeCanvas;
-
-window.onclick = function (e) {
-  $('#search').addClass('hide');
-};
 
 // Header
 
@@ -165,12 +101,12 @@ Template.toolbar.events({
   'click .tags': function (e) {
     if (e.target.innerHTML === 'click to add tags')
       e.target.innerHTML = '';
-    removeTagHighlight ();
+    MK.app.removeTagHighlight ();
     $('.tag').removeClass('display').addClass('write');
   },
   'click .tag': function (e) {
     e.stopDefault();
-    removeTagHighlight ();
+    MK.app.removeTagHighlight ();
     var $tag = $(e.target), html = $tag.html();
     $tag.addClass('highlight');
     $tag.html('<div>'+html+'</div><a class="box-close"></a>');
@@ -192,14 +128,6 @@ Template.toolbar.events({
     $('.tags').trigger('blur');
   }
 });
-
-function removeTagHighlight () {
-  $('.highlight').each(function (idx, tag) {
-    tag = $(tag);
-    tag.html($.trim(tag.text()));
-  });
-  $('.tag').removeClass('highlight');
-}
 
 Template.tags.tags = function () {
   var doc = Documents.findOne({_id: Session.get('docId')});
