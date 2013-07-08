@@ -1,5 +1,10 @@
 Handlebars.registerHelper('convert', function(input){
-  return MK.app.converter.makeHtml(input).substr(0, 1000);
+  return MK.app.getHtmlContent(input).substr(0, 1000);
+});
+
+Handlebars.registerHelper('highlightKeyword', function(text){
+  return Session.get('search') ? MK.app.highlightSearchKeyword(text, Session.get('search')) : text;
+//  return MK.app.getHtmlContent(input).substr(0, 1000);
 });
 
 Handlebars.registerHelper('activeBox', function(id){

@@ -38,8 +38,9 @@
     <div id="login-buttons">
       {{loginButtons align="right"}}
     </div>
+    <input type="text" value="" id="search-box" placeholder="Search for wikis" autocorrect="off" spellcheck="false" />
+    {{#constant}}<img class="loading hidden" src="/images/ajax-loader.gif" />{{/constant}}
     <input id="new-doc" type="button" value="New" />
-    <!--<input type="text" value="" id="search-text" placeholder="Search my documents" autocorrect="off" spellcheck="false" />-->
     {{#if pageTemplateEquals "doc"}}
     <input id="edit-doc" type="button" value="Edit" />
     {{/if}}
@@ -51,19 +52,7 @@
     <input id="cancel-edit" type="button" value="Cancel" />
     {{> toolbar }}
     {{/if}}
-    {{#constant}}<img class="loading" src="/images/ajax-loader.gif" />{{/constant}}
   </div>
-</template>
-
-<template name="search">
-  <ul>
-    {{#each results}}
-    <li doc-id="{{_id}}">
-      <div>title</div>
-      <div class="snippet-xs">content</div>
-    </li>
-    {{/each }}
-  </ul>
 </template>
 
 <template name="home">
@@ -83,7 +72,7 @@
   {{#each docs}}
   <div class="box {{activeBox _id}}" id="{{_id}}">
     {{#if currentUser}}
-    <a href="{{ns}}/{{uri}}/edit">{{title}}</a>
+    <a href="{{ns}}/{{uri}}/edit">{{{highlightKeyword title}}}</a>
     {{else}}
     <a href="{{ns}}/{{uri}}">{{title}}</a>
     {{/if}}
