@@ -114,7 +114,7 @@ pre>code {
     margin-left: 8px;
     color: #ccc;
     display: inline-block;
-    width: 50%;
+    width: 35%;
     font-size: 12px;
 
     .tag {
@@ -294,12 +294,33 @@ pre>code {
   }
 }
 
+@media only screen and (max-width: 1280px) {
+  .box {
+    width: 200px;
+  }
+  .inactive {
+    width: 208px;
+  }
+  #input-title {
+    width: 54%;
+  }
+  #input-namespace {
+    width: 40%;
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .box {
     width: 200px;
   }
   .inactive {
     width: 208px;
+  }
+  #input-title {
+    width: 54%;
+  }
+  #input-namespace {
+    width: 40%;
   }
 }
 
@@ -325,6 +346,13 @@ pre>code {
   #output-pane {
     display: none;
   }
+
+  #input-title {
+    width: 56%;
+  }
+  #input-namespace {
+    width: 40%;
+  }
 }
 
 @media only screen and (max-width: 480px) {
@@ -339,6 +367,14 @@ pre>code {
     #new-doc {
       margin-left: 5px;
     }
+
+    .tags {
+      display: none;
+    }
+  }
+
+  #search-box {
+    display: none;
   }
 
   #left-pane {
@@ -365,5 +401,11 @@ pre>code {
   div.container {
     width: 91%;
     margin: 4px 0 5px 20px;
+  }
+  #input-title {
+    width: 53%;
+  }
+  #input-namespace {
+    width: 40%;
   }
 }
