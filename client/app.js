@@ -40,8 +40,7 @@ MK.app = {
     return Math.ceil(Documents.find().count()/MK.app.pageSize);
   },
   hideLoader: function () {
-    $('.loading, .loading-bar').addClass('hidden');
-    $('#content').removeClass('hide');
+    $('.loading').addClass('hidden');
   },
   showLoader: function () {
     $('.loading').removeClass('hidden');

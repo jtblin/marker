@@ -7,6 +7,14 @@ Template.layout.rendered = function () {
   $('.loading-bar').css('line-height', height + 'px').height(height - 80);
 };
 
+Template.layout.showLoading = function () {
+  return (Session.get('loading')) ? '' : 'hidden';
+};
+
+Template.layout.showContent = function () {
+  return (Session.get('loading')) ? 'hide' : '';
+};
+
 // Header
 
 Template.header.canDelete = function () {
@@ -208,7 +216,10 @@ Template.preview.rendered = function () {
 // Subscriptions
 
 Meteor.autorun(function () {
-  Meteor.subscribe('documents', MK.app.hideLoader);
+  Session.set('loading', true);
+  Meteor.subscribe('documents', function () {
+    Session.set('loading', false);
+  });
 });
 
 // Startup
