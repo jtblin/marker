@@ -49,7 +49,7 @@ MK.app = {
   },
   getHtmlContent: function (input) {
     var markdown = input || Session.get('content') || "";
-    var html = MK.app.converter.makeHtml(markdown) ||
+    var html = input ? MK.app.converter.makeHtml(markdown) :
       "<h1>" + Session.get('title') + "</h1><hr/>" + MK.app.converter.makeHtml(markdown);
     if (Session.get('search')) html = MK.app.highlightSearchKeyword(html, Session.get('search'));
     return html;

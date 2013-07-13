@@ -74,7 +74,7 @@
     {{#if currentUser}}
     <a href="{{ns}}/{{uri}}/edit">{{{highlightKeyword title}}}</a>
     {{else}}
-    <a href="{{ns}}/{{uri}}">{{title}}</a>
+    <a href="{{ns}}/{{uri}}">{{highlightKeyword title}}</a>
     {{/if}}
     <div class="sm-preview">{{{convert content}}}</div>
   </div>
