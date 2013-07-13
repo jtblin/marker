@@ -17,7 +17,7 @@ Template.layout.showContent = function () {
 
 // Header
 
-Template.header.canDelete = function () {
+Template.header.showDeleteBtn = function () {
   var doc = Documents.findOne({_id: Session.get('docId')});
   return (doc && doc.owner === Meteor.userId()) ? "" : "hide";
 };

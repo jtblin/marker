@@ -44,8 +44,8 @@
     {{#if pageTemplateEquals "doc"}}
     <input id="edit-doc" type="button" value="Edit" />
     {{/if}}
-    {{#if pageTemplateIn "home" "doc"}}
-    <input id="delete-doc" type="button" value="Delete" class="{{canDelete}}" />
+    {{#if pageTemplateIn "home" "edit" "doc"}}
+    <input id="delete-doc" type="button" value="Delete" class="{{showDeleteBtn}}" />
     {{/if}}
     {{#if pageTemplateIn "new" "edit"}}
     <input id="save-doc" type="button" value="Save" />
