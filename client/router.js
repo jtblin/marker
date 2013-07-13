@@ -5,10 +5,10 @@ MK.router = {
     console.log('MK.router.init()');
     Meteor.pages({});
 
-    add('/', {to: 'home', as: 'root', before: [MK.app.setAnalytics, MK.app.clearSession] });
-    add(/(.*)\/new\/?$/, {to: 'new', before: [MK.app.setAnalytics, MK.app.clearSession] });
-    add(/(.*)\/(.+)\/edit\/?$/, {to: 'edit', before: [MK.app.setAnalytics, MK.router.setParams] });
-    add(/(.*)\/([^\/]+)\/?$/, {to: 'doc', before: [MK.app.setAnalytics, MK.router.setParams] });
+    add('/', {to: 'home', as: 'root', before: [MK.app.pageInit, MK.app.clearSession] });
+    add(/(.*)\/new\/?$/, {to: 'new', before: [MK.app.pageInit, MK.app.clearSession] });
+    add(/(.*)\/(.+)\/edit\/?$/, {to: 'edit', before: [MK.app.pageInit, MK.router.setParams] });
+    add(/(.*)\/([^\/]+)\/?$/, {to: 'doc', before: [MK.app.pageInit, MK.router.setParams] });
   },
   getPath: function (page, options) {
     var path;

@@ -4,9 +4,11 @@ MK.app = {
   init: function () {
     console.log('MK.app.init()');
     Session.set("currentPage", 1);
-    MK.events.stickyPane();
-    MK.events.infiniteScroll();
     MK.router.init();
+  },
+  pageInit: function () {
+    MK.events.init();
+    MK.app.setAnalytics();
   },
   clearSession: function () {
     Session.set("docId", null);
