@@ -217,6 +217,7 @@ Template.preview.rendered = function () {
 
 Meteor.autorun(function () {
   Session.set('loading', true);
+  Meteor.subscribe('namespaces');
   Meteor.subscribe('documents', function () {
     Session.set('loading', false);
   });
