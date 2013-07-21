@@ -11,6 +11,15 @@ html, body, input, select, textarea {
   visibility: hidden;
 }
 
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -88,7 +97,7 @@ pre>code {
 }
 
 #header {
-  padding: 5px;
+  padding: 10px 5px 10px 10px;
   margin: 0;
   position: relative;
   height: 30px;
@@ -169,33 +178,57 @@ pre>code {
   float: right;
 }
 
-#content {
-  clear: both;
+#sidebar {
+  width: 15%;
+  position: relative;
+  float: left;
   padding: 0px 5px;
+  margin-top: 10px;
+
+  ul {
+    list-style-type: none;
+    padding: 0 0 0 .5em;
+    margin: 2px 0 0 0;
+  }
+
+  li {
+    margin: 0;
+    font-size: .9em;
+  }
+}
+
+.sidebar-subtitle {
+  margin-top: 10px;
+}
+
+#content {
+  padding: 0px 5px;
+  margin-top: 10px;
 }
 
 #canvas-wrapper {
 }
 
 #canvas {
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
 #left-pane {
   float: left;
   left: 1.5%;
+  width: 40%;
 }
 
 #right-pane {
   float: right;
   right: 2.5%;
+  width: 40%;
 }
 
 #left-pane, #right-pane {
   margin: 0;
   padding: 0;
   position: relative;
-  width: 47.5%;
 }
 
 #output-pane {
@@ -212,7 +245,7 @@ pre>code {
   height: 400px;
 }
 #input-title {
-  width: 56%;
+  width: 55%;
   position: relative;
   float: left;
 }

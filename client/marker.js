@@ -11,10 +11,6 @@ Template.layout.showLoading = function () {
   return (Session.get('loading')) ? '' : 'hidden';
 };
 
-Template.layout.showContent = function () {
-  return (Session.get('loading')) ? 'hide' : '';
-};
-
 // Header
 
 Template.header.showDeleteBtn = function () {
@@ -23,6 +19,11 @@ Template.header.showDeleteBtn = function () {
 };
 
 Template.header.events({
+  'click .logo': function () {
+    if (! Meteor.router.templateEquals('home')) return;
+    Session.set('search', null);
+    $('#search-box').val('');
+  },
   'click #new-doc': function () {
     Meteor.go(Meteor.newPath());
   },
@@ -52,8 +53,8 @@ Template.header.events({
     var doc = {
       title: Session.get('title'),
       content: Session.get('content'),
-      public: !!($('#header input[type=checkbox]').attr('checked') === 'checked'),
-      uri: Session.get('title').replace(/\s/g, '-'),
+      public: $('#header input[type=checkbox]').is(':checked'),
+      uri: MK.model.getDocUri(Session.get('title')),
       ns: $.trim($('#input-namespace').val())
     };
     if (! doc.ns.match(/^\//)) doc.ns = '/' + doc.ns;
@@ -68,7 +69,8 @@ Template.header.events({
         MK.app.showSaveMsg('Error: ' + error.reason);
       else {
         MK.app.showSaveMsg('Saved.');
-        Meteor.go(Meteor.editPath({ns: doc.ns, docUri: doc.uri}));
+        if (Meteor.router.templateEquals('new'))
+          Meteor.go(Meteor.editPath({ns: doc.ns, docUri: doc.uri}));
       }
     }
   },
@@ -77,8 +79,10 @@ Template.header.events({
     var search = $.trim(e.currentTarget.value), len = search.length;
     if (len === 0)
       Session.set('search', null);
-    else if (len > 2)
+    else if (len > 2) {
       Session.set('search', search);
+      Meteor.go(Meteor.rootPath());
+    }
   }
 });
 
@@ -147,13 +151,25 @@ Template.tags.rendered = function () {
     $('.tags').html('click to add tags');
 };
 
+// Sidebar
+
+Template.sidebar.recentDocs = function () {
+  return MK.app.recentDocs ? MK.app.recentDocs.getItems() : [];
+};
+
+Template.sidebar.recentNamespaces = function () {
+  return MK.app.recentNamespaces ? MK.app.recentNamespaces.getItems() : [];
+};
+
 // Home
 
 Template.list.docs = function () {
-  var query = {};
+  var query = {}, ns = Session.get('namespace'), search = Session.get('search');
+  if (ns && location.pathname !== '/')
+    query['ns'] = new RegExp('^' + ns, 'i');
   if (Session.get('search')) {
     var rg = new RegExp(Session.get('search'), 'i');
-    query = { $or: [{title: rg}, {content: rg}, {ns: rg}] };
+    query['$or'] = [{title: rg}, {content: rg}, {ns: rg}];
     Session.set('currentPage', 1);
   }
   var pageIndex = Session.get('currentPage');
@@ -188,7 +204,7 @@ Template.editor.title = function () {
 };
 
 Template.editor.namespace = function () {
-  return Meteor.router.template() === 'new' ? document.location.pathname.replace(/\/new\/?$/, '') : Session.get('namespace');
+  return Meteor.router.templateEquals('new') ? document.location.pathname.replace(/\/new\/?$/, '') : Session.get('namespace');
 };
 
 Template.editor.input = function () {

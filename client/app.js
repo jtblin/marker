@@ -5,27 +5,43 @@ MK.app = {
     console.log('MK.app.init()');
     Session.set("currentPage", 1);
     MK.router.init();
+    MK.app.recentDocs = new MK.Collection('recent_documents', 5);
+    MK.app.recentNamespaces = new MK.Collection('recent_namespaces', 5);
   },
   pageInit: function () {
     MK.events.init();
     MK.app.setAnalytics();
+    if (! Meteor.router.templateEquals('home')) $(window).scrollTop(0);
   },
   clearSession: function () {
-    Session.set("docId", null);
-    Session.set("search", null);
     Session.set("content", '');
     Session.set("title", '');
-    Session.set("currentPage", 1);
+    Session.set("namespace", null);
+    if (! Meteor.router.templateEquals('home')) {
+      Session.set("currentPage", 1);
+      Session.set("docId", null);
+    }
+
   },
   converter: new Showdown.converter(),
   setDoc: function (context) {
     var doc = Documents.findOne({ns: context.params.namespace, uri: context.params.docUri});
     if (doc) {
-      if (Session.get("docId") !== doc._id) {
+      if (Session.get("docId") !== doc._id)
         MK.app.setSessionVariables(doc);
-      }
+      MK.app.recentDocs.save({_id: doc._id, uri: doc.uri, ns: doc.ns, title: doc.title, owner: doc.owner});
+      MK.app.recentNamespaces.save({_id: doc.ns});
     } else {
       // TODO: 404
+      console.log(404, context.params, location.pathname);
+    }
+  },
+  setNamespace: function (context) {
+    if (Namespaces.findOne({ns: MK.model.nsRoot(context.params.namespace)})) {
+      Session.set("namespace", context.params.namespace );
+    } else {
+      // TODO: 404
+      console.log(404, context.params.namespace, location.pathname);
     }
   },
   setSessionVariables: function (doc) {

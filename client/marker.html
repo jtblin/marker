@@ -22,6 +22,7 @@
 
 <template name="layout">
   {{> header}}
+  {{> sidebar}}
   <div id="content" class="{{showContent}}">
     <div id="canvas-wrapper">
       <div id="canvas" class="fancy-scrollbar">
@@ -33,7 +34,7 @@
 </template>
 
 <template name="header">
-  <div id="header">
+  <div id="header" class="clearfix">
     <span id="home"><a class="logo" href="{{rootPath}}">Marker</a></span>
     <div id="login-buttons">
       {{loginButtons align="right"}}
@@ -55,6 +56,31 @@
   </div>
 </template>
 
+<template name="sidebar">
+  <div id="sidebar" class="{{showContent}}">
+    <div>
+      <div class="sidebar-subtitle">Recent documents</div>
+      <ul>
+        {{#each recentDocs}}
+        <li><a href="{{docLink}}">{{title}}</a></li>
+        {{/each }}
+      </ul>
+    </div>
+    <div>
+      <div class="sidebar-subtitle">Recent namespaces</div>
+      <ul>
+        {{#each recentNamespaces}}
+        <li><a href="{{nsLink}}">{{_id}}</a></li>
+        {{/each }}
+      </ul>
+    </div>
+  </div>
+</template>
+
+<template name="namespace">
+  {{> home}}
+</template>
+
 <template name="home">
   <div id="left-pane">
     {{> list}}
@@ -71,23 +97,22 @@
 <template name="list">
   {{#each docs}}
   <div class="box {{activeBox _id}}" id="{{_id}}">
-    {{#if currentUser}}
-    <a href="{{ns}}/{{uri}}/edit">{{{highlightKeyword title}}}</a>
-    {{else}}
-    <a href="{{ns}}/{{uri}}">{{highlightKeyword title}}</a>
-    {{/if}}
+    <a href="{{docLink}}">{{{highlightKeyword title}}}</a>
     <div class="sm-preview">{{{convert content}}}</div>
   </div>
   {{/each }}
 </template>
 
+<!--TODO: deduplicate-->
+
 <template name="new">
-  <div id="left-pane">
+  <div id="left-pane" class="edit">
     {{> editor}}
   </div>
   <div id="right-pane">
     {{> preview}}
   </div>
+  {{#constant}}<div id="save-msg" class="save hide">Saving...</div>{{/constant}}
 </template>
 
 <template name="edit">
