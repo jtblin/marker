@@ -21,12 +21,12 @@ Meteor.startup(function () {
 
 Meteor.publish("documents", function () {
   return Documents.find(
-    { $or: [{public: true}, {shared: this.userId}, {owner: this.userId}] }, {sort: {updatedAt: -1, createdAt: -1} }
+    { $or: [{public: true}, {shared: this.userId}, {owner: this.userId}] }
   );
 });
 
 Meteor.publish("namespaces", function () {
   return Namespaces.find(
-    { $or: [{public: true}, {shared: this.userId}, {owner: this.userId}] }, {sort: {updatedAt: -1, createdAt: -1} }
+    { $or: [{public: true}, {shared: this.userId}, {owner: this.userId}] }
   );
 });

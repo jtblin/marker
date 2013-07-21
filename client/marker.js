@@ -160,7 +160,7 @@ Template.list.docs = function () {
   var doc = Documents.findOne(query);
   if (doc)
     MK.app.setSessionVariables(doc);
-  return Documents.find(query, {limit: pageIndex*MK.app.pageSize});
+  return Documents.find(query, {limit: pageIndex*MK.app.pageSize, sort: {updatedAt: -1, createdAt: -1} });
 };
 
 Template.list.events({

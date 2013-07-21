@@ -8,7 +8,8 @@ Meteor.methods({
       content: doc.content.trim(),
       public: !! doc.public,
       uri: doc.uri.trim(),
-      createdAt: Date.now(),
+      createdAt: now,
+      updatedAt: now,
       ns: doc.ns.trim(),
       shared: [],
       tags: []
