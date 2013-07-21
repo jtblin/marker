@@ -103,19 +103,15 @@
   {{/each }}
 </template>
 
-<!--TODO: deduplicate-->
-
 <template name="new">
-  <div id="left-pane" class="edit">
-    {{> editor}}
-  </div>
-  <div id="right-pane">
-    {{> preview}}
-  </div>
-  {{#constant}}<div id="info-msg" class="save hide">Saving...</div>{{/constant}}
+  {{> panes}}
 </template>
 
 <template name="edit">
+  {{> panes}}
+</template>
+
+<template name="panes">
   <div id="left-pane" class="edit">
     {{> editor}}
   </div>
