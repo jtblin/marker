@@ -48,3 +48,7 @@ if (! Array.prototype.indexOf) {
 l = function (text) {
   console.log(text);
 };
+
+now = function () {
+  return Date.now();
+};

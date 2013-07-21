@@ -52,13 +52,16 @@ MK = (function (MK) {
         throw new Meteor.Error(413, reservedKeywords + "are reserved keywords and cannot be used as title");
       if (isNewNamespace(doc.ns) && reservedWords(doc.ns))
         throw new Meteor.Error(413, reservedKeywords + "are reserved keywords and cannot be used as namespace");
-      if (isNewNamespace(doc.ns))
-        Namespaces.insert({ns: MK.model.nsRoot(doc.ns), owner: doc.owner, public: doc.public, createdAt: doc.createdAt, shared: []});
+      if (isNewNamespace(doc.ns)) {
+        Namespaces.insert(
+          {ns: MK.model.nsRoot(doc.ns), owner: Meteor.userId(), public: doc.public, createdAt: doc.createdAt, updatedAt: doc.updatedAt, shared: []}
+        );
+      }
 
       return doc;
     },
     nsRoot: function (ns) {
-      return '/' + ns.split('/').second();
+      return (ns === '/') ? '/' : '/' + ns.split('/').second();
     },
     getDocUri: function (title) {
       return title.replace(/\s/g, '-');

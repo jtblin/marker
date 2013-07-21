@@ -17,6 +17,11 @@ Meteor.startup(function () {
 //			shared: []
 //		});
 //	}
+//  Namespaces.update({ns: '/'}, {$set: {public: false} });
+//  Namespaces.remove({ns: '/'});
+//  Namespaces.remove({});
+//  console.log(Namespaces.findOne({ns: '/'}))
+//  console.log(Namespaces.find().fetch());
 });
 
 Meteor.publish("documents", function () {

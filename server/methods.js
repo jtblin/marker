@@ -1,6 +1,5 @@
 Meteor.methods({
   createDocument: function (doc) {
-    var now = Date.now();
 
     doc = MK.model.validate({
       owner: this.userId,
@@ -8,8 +7,8 @@ Meteor.methods({
       content: doc.content.trim(),
       public: !! doc.public,
       uri: doc.uri.trim(),
-      createdAt: now,
-      updatedAt: now,
+      createdAt: now(),
+      updatedAt: now(),
       ns: doc.ns.trim(),
       shared: [],
       tags: []
@@ -35,12 +34,16 @@ Meteor.methods({
     return docId;
   },
   updateDocument: function (docId, doc) {
-    doc  = MK.model.validate(doc);
-
-    if (! Documents.findOne({ _id : docId, $or : [{public: true}, {shared: this.userId}, {owner: this.userId}] }))
+    if (! (oldDoc = Documents.findOne({ _id : docId, $or : [{public: true}, {shared: this.userId}, {owner: this.userId}] })))
       throw new Meteor.Error(403, "You don't have the rights to modify this document");
 
-    return Documents.update({ _id : docId}, {$set : {content: doc.content, title: doc.title, public: doc.public, ns: doc.ns, updatedAt: Date.now()} });
+    doc.createdAt = oldDoc.createdAt;
+    doc.updatedAt = now();
+    doc.public = oldDoc.public;
+
+    doc  = MK.model.validate(doc);
+
+    return Documents.update({ _id : docId}, {$set : {content: doc.content, title: doc.title, public: doc.public, ns: doc.ns, updatedAt: doc.updatedAt} });
   },
   updateTags: function (docId, tags) {
     if (! this.userId)
@@ -48,7 +51,7 @@ Meteor.methods({
     if (! Documents.findOne({ _id : docId, $or : [{public: true}, {shared: this.userId}, {owner: this.userId}] }))
       throw new Meteor.Error(403, "You don't have the rights to modify this document");
 
-    return Documents.update({ _id : docId}, {$set : {tags: tags, updatedAt: Date.now()} });
+    return Documents.update({ _id : docId}, {$set : {tags: tags, updatedAt: now()} });
   },
   deleteDocument: function (docId) {
     if (! this.userId)
