@@ -164,19 +164,22 @@ Template.sidebar.recentNamespaces = function () {
 // Home
 
 Template.list.docs = function () {
-  var query = {}, ns = Session.get('namespace'), search = Session.get('search');
+  var query = {}, ns = Session.get('namespace'), search = Session.get('search'),
+      sort = {updatedAt: -1, createdAt: -1}, pageIndex = Session.get('currentPage');
+
   if (ns && location.pathname !== '/')
     query['ns'] = new RegExp('^' + ns, 'i');
+
   if (Session.get('search')) {
     var rg = new RegExp(Session.get('search'), 'i');
     query['$or'] = [{title: rg}, {content: rg}, {ns: rg}];
     Session.set('currentPage', 1);
   }
-  var pageIndex = Session.get('currentPage');
-  var doc = Documents.findOne(query);
+
+  var doc = Session.get('docId') ? Documents.findOne({_id: Session.get('docId')}) : Documents.findOne(query, {sort: sort});
   if (doc)
     MK.app.setSessionVariables(doc);
-  return Documents.find(query, {limit: pageIndex*MK.app.pageSize, sort: {updatedAt: -1, createdAt: -1} });
+  return Documents.find(query, {limit: pageIndex*MK.app.pageSize, sort: sort });
 };
 
 Template.list.events({
