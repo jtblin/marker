@@ -70,11 +70,17 @@ MK.app = {
     if (Session.get('search')) html = MK.app.highlightSearchKeyword(html, Session.get('search'));
     return html;
   },
-  showSaveMsg: function (msg) {
-    $('#save-msg').html(msg);
-    setTimeout(function () {
-      $('#save-msg').fadeOut();
-    }, 3000);
+  info: function (msg) {
+    showInfo(msg, 'info');
+    hideInfo();
+  },
+  warn: function (msg) {
+    showInfo(msg, 'warn');
+    hideInfo();
+  },
+  error: function (msg) {
+    showInfo(msg, 'error');
+    hideInfo();
   },
   removeTagHighlight: function () {
     $('.highlight').each(function (idx, tag) {
@@ -110,3 +116,13 @@ MK.app = {
     }
   }
 };
+
+function showInfo (msg, className) {
+  $('#info-msg').removeClass('info warn error').addClass(className).html(msg).fadeIn();
+}
+
+function hideInfo () {
+  setTimeout(function () {
+    $('#info-msg').fadeOut();
+  }, 3000);
+}

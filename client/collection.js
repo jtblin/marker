@@ -1,4 +1,4 @@
-MK = window.MK = window.MK || {};
+var MK = window.MK = window.MK || {};
 
 MK.Collection = function (name, maxItems) {
   var db = window.localStorage, collName = name, items, loaded = false,

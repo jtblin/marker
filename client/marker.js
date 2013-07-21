@@ -1,4 +1,4 @@
-MK = window.MK = window.MK || {};
+var MK = window.MK = window.MK || {};
 
 // Layout
 
@@ -49,7 +49,7 @@ Template.header.events({
   },
   'click #save-doc': function () {
     MK.app.showLoader();
-    $('#save-msg').html('Saving...').fadeIn();
+    MK.app.info('Saving...');
     var doc = {
       title: Session.get('title'),
       content: Session.get('content'),
@@ -66,9 +66,9 @@ Template.header.events({
     function callback (error) {
       MK.app.hideLoader();
       if (error)
-        MK.app.showSaveMsg('Error: ' + error.reason);
+        MK.app.error('Error: ' + error.reason);
       else {
-        MK.app.showSaveMsg('Saved.');
+        MK.app.info('Saved.');
         if (Meteor.router.templateEquals('new'))
           Meteor.go(Meteor.editPath({ns: doc.ns, docUri: doc.uri}));
       }

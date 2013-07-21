@@ -1,4 +1,4 @@
-MK = window.MK = window.MK || {};
+var MK = window.MK = window.MK || {};
 
 var stickyTop;
 

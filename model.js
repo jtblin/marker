@@ -1,8 +1,8 @@
 Documents = new Meteor.Collection("documents");
 Namespaces = new Meteor.Collection("namespaces");
 
-if (Meteor.isClient) MK = window.MK = window.MK || {};
-else MK = Meteor.MK = Meteor.MK || {};
+if (Meteor.isClient) var MK = window.MK = window.MK || {};
+else var MK = Meteor.MK = Meteor.MK || {};
 
 MK = (function (MK) {
 
