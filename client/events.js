@@ -13,7 +13,7 @@ MK.events = {
     $('#output-pane').css('height', window.innerHeight - 50);
     $('.save').
       css('top', window.innerHeight - 50).
-      css('left', window.innerWidth/2 - 25);
+      css('left', window.innerWidth/2 - 150);
   }
 };
 
