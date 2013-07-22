@@ -1,3 +1,5 @@
+config.development.js
+config.production.js
 .DS_Store
 ozone.sublime-project
 ozone.sublime-workspace

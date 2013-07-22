@@ -74,6 +74,9 @@
         {{/each }}
       </ul>
     </div>
+    {{#if pageTemplateEquals "edit"}}
+    {{> upload}}
+    {{/if}}
   </div>
 </template>
 
@@ -118,7 +121,7 @@
   <div id="right-pane">
     {{> preview}}
   </div>
-  {{#constant}}<div id="info-msg" class="save hide">Saving...</div>{{/constant}}
+  {{#constant}}<div class="info-wrapper"><div id="info-msg" class="save" style="display: none"></div></div>{{/constant}}
 </template>
 
 <template name="doc">
@@ -150,6 +153,24 @@
   {{#each tags}}
   <div class="tag display">{{.}}</div>
   {{/each}}
+</template>
+
+<!--TODO: review entirely-->
+
+<template name="upload">
+  <form id="upload" enctype="multipart/form-data" action="https://aag-tests.s3.amazonaws.com/" method="post">
+    <div class="row">
+      <label for="file">Select a File to Upload</label><br />
+      <input type="file" name="file" id="file" onchange="fileSelected()"/>
+    </div>
+    <div id="fileName"></div>
+    <div id="fileSize"></div>
+    <div id="fileType"></div>
+    <div class="row">
+      <input type="button" onclick="uploadFile()" value="Upload" />
+    </div>
+    <div id="progress"></div>
+  </form>
 </template>
 
 <!--Unused-->

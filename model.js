@@ -7,6 +7,8 @@ else var MK = Meteor.MK = Meteor.MK || {};
 MK = (function (MK) {
 
   var RESERVED_KEYWORDS = ['new', 'edit'], reservedKeywords = RESERVED_KEYWORDS.join(', ');
+  var MAX_FILE_SIZE = 1024*1024*10;
+//  var MAX_FILE_SIZE = 10;
 
   function isUriUnique (ns, uri) {
     return ! Documents.findOne({ ns: ns, uri: uri, public: false, shared: {$ne: Meteor.userId() }, owner: {$ne: Meteor.userId()} });
@@ -26,6 +28,10 @@ MK = (function (MK) {
 
   function isBlank (string) {
     return typeof string === "undefined" || string.trim().length === 0;
+  }
+
+  function bytesToMega (bytes) {
+    return bytes / (1024*1024);
   }
 
   MK.model = {
@@ -65,6 +71,26 @@ MK = (function (MK) {
     },
     getDocUri: function (title) {
       return title.replace(/\s/g, '-');
+    },
+    validateFile: function (file) {
+      if (file.size > MAX_FILE_SIZE)
+        throw new Meteor.Error(413, "Error uploading file " + file.name + ".<br>" +
+          "File too large, we only accept files up to " + bytesToMega(MAX_FILE_SIZE) + "Mb at the moment.");
+      return true;
+    },
+    // TODO: remove / keep?
+    clientFn: function (/* fn, arguments*, cb */) {
+      var fn = Array.prototype.shift.call(arguments), cb = Array.prototype.pop.call(arguments);
+      if (typeof fn !== 'function' || typeof cb !== 'function')
+        throw new Meteor.Error(500, "You muss pass the function to call as first argument, " +
+          "the callback as last arguments and the parameters for the function in between");
+
+      try {
+        cb(null, fn.apply(this, arguments));
+      }
+      catch (e) {
+        cb(e);
+      }
     }
   };
 

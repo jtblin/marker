@@ -9,11 +9,12 @@ MK.events = {
     if (Meteor.router.templateEquals('home')) $(window).scroll(windowScroll);
   },
   resizeCanvas: function () {
-    $('#input-pane').css('height', window.innerHeight - 80);
-    $('#output-pane').css('height', window.innerHeight - 50);
-    $('.save').
-      css('top', window.innerHeight - 50).
-      css('left', window.innerWidth/2 - 150);
+    $('#input-pane').css('height', window.innerHeight - 100);
+    $('#output-pane').css('height', window.innerHeight - 70);
+    $('.info-wrapper').css({
+      'top': window.innerHeight - 50,
+      'width': '100%'
+    });
   }
 };
 

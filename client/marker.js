@@ -199,6 +199,12 @@ Template.editor.events({
   },
   'keyup #input-title': function (e) {
     Session.set('title', e.target.value || "");
+  },
+  "dragover #input-pane, dragleave #input-pane": function (e) {
+    MK.fileUploader.dragHover(e);
+  },
+  'drop #input-pane, change #file-select': function (e) {
+    MK.fileUploader.handleFile(e, Session.get("selectedRoom"));
   }
 });
 

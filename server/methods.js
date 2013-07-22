@@ -1,3 +1,5 @@
+MK = Meteor.MK = Meteor.MK || {};
+
 Meteor.methods({
   createDocument: function (doc) {
 
@@ -59,6 +61,11 @@ Meteor.methods({
     if (! Documents.findOne({ _id : docId, owner: this.userId }))
       throw new Meteor.Error(403, "You don't have the rights to modify this document");
     Documents.remove({_id : docId});
+  },
+  getS3Token: function (key) {
+    // TODO: validate user etc.
+    var s3 = new MK.S3Client(MK.config.s3.accessKey, MK.config.s3.secretKey);
+    return s3.getWritePolicy(key, MK.config.s3.bucket, 5*60, MK.config.s3.maxFileSize, MK.config.s3.acl);
   }
 });
 

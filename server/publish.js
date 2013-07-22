@@ -22,6 +22,7 @@ Meteor.startup(function () {
 //  Namespaces.remove({});
 //  console.log(Namespaces.findOne({ns: '/'}))
 //  console.log(Namespaces.find().fetch());
+//  console.log(process.env);
 });
 
 Meteor.publish("documents", function () {

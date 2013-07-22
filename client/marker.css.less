@@ -274,10 +274,16 @@ pre>code {
   }
 }
 
-.save {
+.info-wrapper {
   position: absolute;
   z-index: 500;
+  left: 0;
+  text-align: center;
+}
+
+.save {
   padding: 2px 10px;
+  display: inline-block;
 }
 
 .info {
@@ -288,13 +294,14 @@ pre>code {
 
 .warn {
   border: 1px solid #000000;
-  background-color: #fffa08;
+  background-color: #fffcb6;
   color: #000000;
 }
 
 .error {
   border: 1px solid #ffffff;
   background-color: #750505;
+  color: #ffffff;
 }
 
 .loading-bar {
@@ -309,6 +316,30 @@ pre>code {
 
 .search-highlight {
   background-color: #fffa08;
+}
+
+.hover {
+  color: #f00;
+  border: 2px dashed #f00;
+  box-shadow: grey 0 3px 4px #888;
+}
+
+#progress p {
+  display: block;
+  width: 220px;
+  padding: 2px 5px;
+  margin: 2px 0;
+  border: 1px inset #446;
+  border-radius: 5px;
+  background: #eee url(/images/progress.png) 100% 0 repeat-y;
+}
+
+p.success {
+  background: #0c0 none 0 0 no-repeat ! important;
+}
+
+p.failure {
+  background: #c00 none 0 0 no-repeat ! important;
 }
 
 @media only screen and (min-width: 960px), only screen and (min-device-width: 960px) {
